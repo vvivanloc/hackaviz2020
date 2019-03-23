@@ -4,6 +4,7 @@ import markers from '../maps/markers.json';
 declare const par_commune: any;
 
 import { Commune } from './model/commune';
+import { MarkerUtils } from './utils/marker.utils';
 
 const features = {
   showCommuneDelimitations: false,
@@ -12,6 +13,20 @@ const features = {
 
 // -1 for all
 const nbMaxCommunes: number = -1;
+
+function hoursToHue(nbHours: number) {
+  let hue = 0;
+  if (nbHours < 0.25) {
+    hue = 200;
+  } else if (nbHours < 0.5) {
+    hue = 120;
+  } else if (nbHours < 1) {
+    hue = 40;
+  } else if (nbHours < 2) {
+    hue = 20;
+  } else hue = 0;
+  return hue;
+}
 
 function main() {
   var map = L.map('map', {
@@ -65,7 +80,7 @@ function main() {
       communes = communes.slice(0, nbMaxCommunes);
     }
 
-    communes=communes.sort((a,b)=>a['emplois']>b['emplois']?-1:1 )
+    communes = communes.sort((a, b) => (a['emplois'] > b['emplois'] ? -1 : 1));
   };
   if (features.showCommuneCenters) {
     processData();
@@ -92,18 +107,12 @@ function main() {
     communes.forEach(commune => {
       const props = JSON.stringify(commune).split(',');
 
-      const popupAttributes = ['emplois', '2014_intra_heure', '2014_1'];
+      const popupAttributes = ['emplois', '2014_intra_heure', '2014_extra_heure', '2014_1'];
 
       const nbIntraHeures = commune[popupAttributes[1]] / commune['2014_1'];
-      let hue = 0;
-      if (nbIntraHeures < 0.5) {
-        hue = 120;
-      } else if (nbIntraHeures < 1) {
-        hue = 40;
-      } else if (nbIntraHeures < 2) {
-        hue = 20;
-      } else hue = 0;
-
+      const nbExtraHeures = commune[popupAttributes[2]] / commune['2014_1'];
+      const hueLeft = hoursToHue(nbIntraHeures);
+      const hueRight = hoursToHue(nbExtraHeures);
       const radius =
         500 * Math.max(1, (commune[popupAttributes[0]] / nbMaxEmplois) * 30);
       console.log(radius);
@@ -115,20 +124,43 @@ function main() {
         popupLabel +
         '<br>' +
         '2014_intra_heure/2014_1:' +
-        commune[popupAttributes[1]] / commune['2014_1'];
+        commune[popupAttributes[1]] / commune['2014_1']
+        +
+        '<br>' +
+        '2014_extra_heure/2014_1:' +
+        commune[popupAttributes[2]] / commune['2014_1'];
 
-      const marker = L.circle([commune.longitude, commune.latitude], {
+      
+      buildMarker(commune, radius, hueLeft, popupLabel, markerOnClick, props, true);
+      buildMarker(commune, radius, hueRight, popupLabel, markerOnClick, props, false);
+    });
+  }
+
+  function buildMarker(
+    commune: Commune,
+    radius: number,
+    hue: number,
+    popupLabel: string,
+    markerOnClick: (event: Event) => void,
+    props: string[],
+    left: boolean
+  ) {
+    let fct = MarkerUtils.buildHalfLeftCircle;
+    if (!left) {
+      fct = MarkerUtils.buildHalfRightCircle;
+    }
+    const markerLeft = L.polygon(
+      fct([commune.longitude, commune.latitude], radius),
+      {
         color: `hsl(${hue}, 100%, 25%)`,
         fillColor: `hsl(${hue}, 100%, 75%)`,
-        fillOpacity: 0.5,
-        radius: radius
-      })
-        .bindPopup(` <b>${commune.commune}</b><br>${popupLabel}`)
-        .on('click', markerOnClick)
-        .addTo(map);
-
-      marker['properties'] = props;
-    });
+        fillOpacity: 0.5
+      }
+    )
+      .bindPopup(` <b>${commune.commune}</b><br>${popupLabel}`)
+      .on('click', markerOnClick)
+      .addTo(map);
+    markerLeft['properties'] = props;
   }
 }
 
