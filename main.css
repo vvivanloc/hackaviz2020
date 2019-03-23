@@ -1,0 +1,10 @@
+.column {
+  display: flex;
+  flex-direction: row;
+}
+.column #map {
+  flex: 1;
+}
+.column #info {
+  width: 200px;
+}
