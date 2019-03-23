@@ -1,6 +1,11 @@
 import L from 'leaflet';
 
 export class MarkerUtils {
+
+
+  private static readonly epsilon = 0.1;
+  private static readonly nbSides = 4;
+
   /** taken from  Leaflet.GeometryUtil
    * http://makinacorpus.github.io/Leaflet.GeometryUtil/index.html
    * MakinaCorpus
@@ -42,8 +47,8 @@ export class MarkerUtils {
     endAngleRad: number
   ): Array<[number, number]> => {
     const points: Array<[number, number]> = [];
-    const nbSides = 6;
-    const arcIncrement = (2 * Math.PI) / nbSides;
+    
+    const arcIncrement = (2 * Math.PI) / MarkerUtils.nbSides;
 
     for (
       let angle = startAngleRad;
@@ -60,6 +65,7 @@ export class MarkerUtils {
     return points;
   };
 
+  
   static buildHalfLeftCircle = (
     center: [number, number],
     radiusMeter: number
@@ -68,7 +74,7 @@ export class MarkerUtils {
       center,
       radiusMeter,
       Math.PI,
-      Math.PI * 2
+      Math.PI * 2 + MarkerUtils.epsilon
     );
   };
 
@@ -76,6 +82,11 @@ export class MarkerUtils {
     center: [number, number],
     radiusMeter: number
   ): Array<[number, number]> => {
-    return MarkerUtils.buildArcCircle(center, radiusMeter, 0, Math.PI + 0.1);
+    return MarkerUtils.buildArcCircle(
+      center,
+      radiusMeter,
+      0,
+      Math.PI + MarkerUtils.epsilon
+    );
   };
 }
