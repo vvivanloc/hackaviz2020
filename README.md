@@ -10,3 +10,7 @@ See my blog post for details: http://asmaloney.com/2014/01/code/creating-an-inte
 23 January 2014  
 Andy Maloney  
 https://asmaloney.com
+
+based also on 
+Typescript Leaflet Template
+https://github.com/oardi/leaflet-typescript-template
