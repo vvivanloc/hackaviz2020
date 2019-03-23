@@ -4,7 +4,7 @@
   "description": "some prototype for Hackaviz 2019",
   "main": "leaf-demo.js",
   "repository": "https://github.com/asmaloney/Leaflet_Example.git",
-  "author": "nop",
+  "author": "n0p@laposte.net",
   "license": "MIT",
   "dependencies": {
     "leaflet": "^1.4.0"

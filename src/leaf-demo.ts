@@ -1,6 +1,9 @@
 import L from 'leaflet';
 import markers from '../maps/markers.json';
 
+
+declare const par_commune: any;
+
 function main() {
   var map = L.map('map', {
     center: [43.5, 0.5],
@@ -30,8 +33,9 @@ function main() {
   }
 
   /* Hydro */
-  // var hydro = new L.LayerGroup();
-  // L.geoJson(hydro_s, {style: hydrosStyle}).addTo(hydro);
+  const hydro = new L.LayerGroup();
+  L.geoJSON((par_commune as any)).addTo(hydro);
+  hydro.addTo(map);
 }
 
 main();

@@ -24,6 +24,7 @@ module.exports = (env, argv) => {
 		module: {
 			rules: [
 				{ test: /\.tsx?$/, loader: 'ts-loader' },
+				
 			]
 		},
 		plugins: [
