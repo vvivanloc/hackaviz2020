@@ -41,6 +41,6 @@ export interface Commune {
   '2014_intra_communes': number;
   '2014_extra_km': number;
   '2014_intra_km': number;
-  '2014_extra_heure': number;
-  '2014_intra_heure': number;
+  '2014_extra_heure': number|null;
+  '2014_intra_heure': number|null;
 }

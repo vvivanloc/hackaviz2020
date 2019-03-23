@@ -10,7 +10,8 @@ const features = {
   showCommuneCenters: true
 };
 
-const nbMaxCommunes: number = 100;
+// -1 for all
+const nbMaxCommunes: number = -1;
 
 function main() {
   var map = L.map('map', {
@@ -54,11 +55,20 @@ function main() {
     communes.addTo(map);
   }
 
-  if (features.showCommuneCenters) {
-    let communes = par_commune.features as Array<any>;
+  let communes = par_commune.features.map(
+    commune => commune.properties
+  ) as Array<Commune>;
+
+  const processData = () => {
+    communes = communes.filter(commune => commune['2014_intra_heure'] !== null);
     if (nbMaxCommunes !== -1) {
       communes = communes.slice(0, nbMaxCommunes);
     }
+
+    communes=communes.sort((a,b)=>a['emplois']>b['emplois']?-1:1 )
+  };
+  if (features.showCommuneCenters) {
+    processData();
 
     const infoDomElement = document.getElementById('info');
     function markerOnClick(event: Event) {
@@ -68,19 +78,52 @@ function main() {
         infoDomElement.innerHTML = props.join('<br>');
       }
     }
+
+    let nbMaxEmplois = 0;
     communes.forEach(commune => {
-      const communeProps = commune.properties as Commune;
+      nbMaxEmplois = Math.max(nbMaxEmplois, commune['emplois'] || 0);
+    });
 
-      const props = JSON.stringify(communeProps).split(',');
+    let nbMaxHeures = 0;
+    communes.forEach(commune => {
+      nbMaxHeures = Math.max(nbMaxHeures, commune['2014_1'] || 0);
+    });
 
-      const marker = L.marker([communeProps.longitude, communeProps.latitude], {
-        icon: myIcon
+    communes.forEach(commune => {
+      const props = JSON.stringify(commune).split(',');
+
+      const popupAttributes = ['emplois', '2014_intra_heure', '2014_1'];
+
+      const nbIntraHeures = commune[popupAttributes[1]] / commune['2014_1'];
+      let hue = 0;
+      if (nbIntraHeures < 0.5) {
+        hue = 120;
+      } else if (nbIntraHeures < 1) {
+        hue = 40;
+      } else if (nbIntraHeures < 2) {
+        hue = 20;
+      } else hue = 0;
+
+      const radius =
+        500 * Math.max(1, (commune[popupAttributes[0]] / nbMaxEmplois) * 30);
+      console.log(radius);
+      let popupLabel = popupAttributes
+        .map(popupAttribute => popupAttribute + ': ' + commune[popupAttribute])
+        .join('<br>');
+
+      popupLabel =
+        popupLabel +
+        '<br>' +
+        '2014_intra_heure/2014_1:' +
+        commune[popupAttributes[1]] / commune['2014_1'];
+
+      const marker = L.circle([commune.longitude, commune.latitude], {
+        color: `hsl(${hue}, 100%, 25%)`,
+        fillColor: `hsl(${hue}, 100%, 75%)`,
+        fillOpacity: 0.5,
+        radius: radius
       })
-        .bindPopup(
-          ` <b>${communeProps.commune}</b><br>${props
-            .slice(0, 10)
-            .join('<br>')}`
-        )
+        .bindPopup(` <b>${commune.commune}</b><br>${popupLabel}`)
         .on('click', markerOnClick)
         .addTo(map);
 
