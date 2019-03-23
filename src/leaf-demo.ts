@@ -82,59 +82,6 @@ function main() {
 
     communes = communes.sort((a, b) => (a['emplois'] > b['emplois'] ? -1 : 1));
   };
-  if (features.showCommuneCenters) {
-    processData();
-
-    const infoDomElement = document.getElementById('info');
-    function markerOnClick(event: Event) {
-      var props = event.target['properties'];
-      console.log(props);
-      if (infoDomElement) {
-        infoDomElement.innerHTML = props.join('<br>');
-      }
-    }
-
-    let nbMaxEmplois = 0;
-    communes.forEach(commune => {
-      nbMaxEmplois = Math.max(nbMaxEmplois, commune['emplois'] || 0);
-    });
-
-    let nbMaxHeures = 0;
-    communes.forEach(commune => {
-      nbMaxHeures = Math.max(nbMaxHeures, commune['2014_1'] || 0);
-    });
-
-    communes.forEach(commune => {
-      const props = JSON.stringify(commune).split(',');
-
-      const popupAttributes = ['emplois', '2014_intra_heure', '2014_extra_heure', '2014_1'];
-
-      const nbIntraHeures = commune[popupAttributes[1]] / commune['2014_1'];
-      const nbExtraHeures = commune[popupAttributes[2]] / commune['2014_1'];
-      const hueLeft = hoursToHue(nbIntraHeures);
-      const hueRight = hoursToHue(nbExtraHeures);
-      const radius =
-        500 * Math.max(1, (commune[popupAttributes[0]] / nbMaxEmplois) * 30);
-      console.log(radius);
-      let popupLabel = popupAttributes
-        .map(popupAttribute => popupAttribute + ': ' + commune[popupAttribute])
-        .join('<br>');
-
-      popupLabel =
-        popupLabel +
-        '<br>' +
-        '2014_intra_heure/2014_1:' +
-        commune[popupAttributes[1]] / commune['2014_1']
-        +
-        '<br>' +
-        '2014_extra_heure/2014_1:' +
-        commune[popupAttributes[2]] / commune['2014_1'];
-
-      
-      buildMarker(commune, radius, hueLeft, popupLabel, markerOnClick, props, true);
-      buildMarker(commune, radius, hueRight, popupLabel, markerOnClick, props, false);
-    });
-  }
 
   function buildMarker(
     commune: Commune,
@@ -161,6 +108,87 @@ function main() {
       .on('click', markerOnClick)
       .addTo(map);
     markerLeft['properties'] = props;
+  }
+  if (features.showCommuneCenters) {
+    processData();
+
+    const infoDomElement = document.getElementById('info');
+    function markerOnClick(event: Event) {
+      var props = event.target['properties'];
+      if (infoDomElement) {
+        infoDomElement.innerHTML = props.join('<br>');
+      }
+    }
+
+    let nbMaxEmplois = 0;
+    communes.forEach(commune => {
+      nbMaxEmplois = Math.max(nbMaxEmplois, commune['emplois'] || 0);
+    });
+
+    let nbMaxHeures = 0;
+    communes.forEach(commune => {
+      nbMaxHeures = Math.max(nbMaxHeures, commune['2014_1'] || 0);
+    });
+
+    communes.forEach(commune => {
+      const props = JSON.stringify(commune).split(',');
+
+      const popupAttributes = [
+        'emplois',
+        '2014_intra_heure',
+        '2014_extra_heure',
+        '2014_1'
+      ];
+
+      const nbIntraHeures = commune[popupAttributes[1]] / commune['2014_1'];
+      const nbExtraHeures = commune[popupAttributes[2]] / commune['2014_1'];
+      const hueLeft = hoursToHue(nbIntraHeures);
+      const hueRight = hoursToHue(nbExtraHeures);
+      const radius =
+        500 * Math.max(1, (commune[popupAttributes[0]] / nbMaxEmplois) * 30);
+      console.log(radius);
+
+      let radiusLeft = radius;
+      let radiusRight = radius;
+      if (nbIntraHeures || nbExtraHeures) {
+        if (nbIntraHeures > nbExtraHeures) {
+          radiusRight = radius / (nbIntraHeures / nbExtraHeures) || 1;
+        } else if (nbIntraHeures < nbExtraHeures) {
+          radiusLeft = radius / (nbExtraHeures / nbIntraHeures) || 1;
+        }
+      }
+      let popupLabel = popupAttributes
+        .map(popupAttribute => popupAttribute + ': ' + commune[popupAttribute])
+        .join('<br>');
+
+      popupLabel =
+        popupLabel +
+        '<br>' +
+        '2014_intra_heure/2014_1:' +
+        commune[popupAttributes[1]] / commune['2014_1'] +
+        '<br>' +
+        '2014_extra_heure/2014_1:' +
+        commune[popupAttributes[2]] / commune['2014_1'];
+
+      buildMarker(
+        commune,
+        radiusLeft,
+        hueLeft,
+        popupLabel,
+        markerOnClick,
+        props,
+        true
+      );
+      buildMarker(
+        commune,
+        radiusRight,
+        hueRight,
+        popupLabel,
+        markerOnClick,
+        props,
+        false
+      );
+    });
   }
 }
 
