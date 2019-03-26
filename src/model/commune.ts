@@ -1,6 +1,6 @@
 export interface Commune {
   ID_GEOFLA: string;
-  INSEE_COM: string;
+  INSEE_COM: number;
   commune: string;
   departement: number;
   latitude: number;
