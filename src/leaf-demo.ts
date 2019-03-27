@@ -98,7 +98,7 @@ const processData = (communes: Array<Commune>) => {
 };
 
 function buildMarker(
-  map: L.Map,
+  markerLayer: L.LayerGroup,
   commune: Commune,
   radius: number,
   hue: number,
@@ -118,13 +118,13 @@ function buildMarker(
   })
     .bindPopup(` <b>${commune.commune}</b><br>${popupLabel}`)
     .on('click', markerOnClick)
-    .addTo(map);
+    .addTo(markerLayer);
   marker['properties'] = props;
-  marker['INSEE_COM']=commune.INSEE_COM
+  marker['INSEE_COM'] = commune.INSEE_COM;
 }
 
 function renderMarkerPerCommune(
-  map: L.Map,
+  markerLayer: L.LayerGroup,
   commune: Commune,
   markerOnClick: (event: Event) => void
 ) {
@@ -163,7 +163,7 @@ function renderMarkerPerCommune(
     '2014_extra_heure/2014_1:' +
     commune[popupAttributes[2]] / commune['2014_1'];
   buildMarker(
-    map,
+    markerLayer,
     commune,
     radiusLeft,
     hueLeft,
@@ -173,7 +173,7 @@ function renderMarkerPerCommune(
     true
   );
   buildMarker(
-    map,
+    markerLayer,
     commune,
     radiusRight,
     hueRight,
@@ -184,66 +184,141 @@ function renderMarkerPerCommune(
   );
 }
 
-const trajetInterMarkerRadius = 500;
-function renderInterPerCommune(map: L.Map, commune: Commune) {
+const trajetInterMarkerRadius = 250;
+function renderInterPerCommune(
+  lineOutlines: L.LayerGroup,
+  lineInlines: L.LayerGroup,
+  lineArcs: L.LayerGroup,
+  commune: Commune,
+  color: string
+) {
+
+  
   const weight = nbPeopleToStrokeWeight(commune['2014_inter']);
 
   L.circle([commune.longitude, commune.latitude], {
     color: `black`,
     radius: trajetInterMarkerRadius,
-    weight: weight,
+    weight: weight + 5,
+    opacity: 1
+  }).addTo(lineOutlines);
+
+  L.circle([commune.longitude, commune.latitude], {
+    color: `white`,
+    radius: trajetInterMarkerRadius,
+    weight: weight + 3,
+    opacity: 1,
     fill: true,
     fillOpacity: 1.0,
-    fillColor: 'white',
-    opacity: 0.5
+    fillColor: 'white'
+  }).addTo(lineInlines);
+
+  L.circle([commune.longitude, commune.latitude], {
+    color: color,
+    radius: trajetInterMarkerRadius,
+    weight: weight,
+    fill: false,
+    opacity: 1
   })
-    .bindPopup(
+    .bindTooltip(
       ` <b>${commune.commune}</b><br>2014_inter: ${commune['2014_inter']}`
     )
-    .addTo(map);
+    .addTo(lineArcs);
+
+  L.circle([commune.longitude, commune.latitude], {
+    color: `black`,
+    radius: trajetInterMarkerRadius * 0.9,
+    weight: 1,
+    opacity: 1,
+    fill: false
+    // fill: true,
+    // fillOpacity: 1.0,
+    // fillColor: 'white'
+  }).addTo(lineArcs);
 }
 
 function renderArcs(
-  map: L.Map,
+  lineOutlines: L.LayerGroup,
+  lineInlines: L.LayerGroup,
+  lineArcs: L.LayerGroup,
   trajet: Trajet,
   communeLatLongs: CommuneLatLongs,
-  codeInsee: number
+  codeInsee: number,
+  filteredTravelsDest: Trajet[]
 ) {
-  const weightExtra = nbPeopleToStrokeWeight(
-    trajet['2014_extra_travail_commune']
-  );
-
   const _src = communeLatLongs[trajet.insee];
   const _dest = communeLatLongs[trajet.travail_insee];
 
-  const sign = trajet.insee === codeInsee ? 1 : -1;
-
   const src = new L.LatLng(_src.lat, _src.lon);
   const dest = new L.LatLng(_dest.lat, _dest.lon);
-  //const bearing = MarkerUtils.bearing(src,dest)+90;
-  const bearing = 0;
-  //  const offsetSrc = MarkerUtils.interpolateOnLineFromDistance(map, [src,dest],trajetInterMarkerRadius);
-  //  const offsetDest = MarkerUtils.interpolateOnLineFromDistance(map, [src,dest],-trajetInterMarkerRadius);
-  const offsetMeter = 50;
-  const offsetSrc = MarkerUtils.destination(
-    { lat: _src.lat, lng: _src.lon },
-    bearing,
-    offsetMeter * sign
-  );
-  const offsetDest = MarkerUtils.destination(
-    { lat: _dest.lat, lng: _dest.lon },
-    bearing,
-    offsetMeter * sign
+
+  const weightSrcExtra = nbPeopleToStrokeWeight(
+    trajet['2014_extra_travail_commune']
   );
 
-  L.polyline(
-    [[offsetSrc.lng, offsetSrc.lat], [offsetDest.lng, offsetDest.lat]],
-    {
-      color: sign === -1 ? 'red' : 'green',
-      weight: weightExtra,
-      opacity: 0.5
-    } as any
-  ).addTo(map);
+  let weightDestExtra = 0;
+  const reverseArc = filteredTravelsDest.find(
+    revTrajet =>
+      revTrajet.travail_insee === codeInsee &&
+      revTrajet.insee === trajet.travail_insee
+  );
+  if (reverseArc) {
+    weightDestExtra = nbPeopleToStrokeWeight(
+      reverseArc['2014_extra_travail_commune']
+    );
+  }
+
+  const segmentWidth = weightDestExtra + weightSrcExtra + 4;
+
+  const mainLine: L.LatLngExpression[] = [
+    [src.lng, src.lat],
+    [dest.lng, dest.lat]
+  ];
+  L.polyline(mainLine, {
+    color: '#000',
+    weight: segmentWidth + 5,
+    opacity: 1,
+    offset: -(weightDestExtra - weightSrcExtra) / 2
+  } as any).addTo(lineOutlines);
+
+  const srcArcLabel = ` <b>${trajet.commune}->${
+    trajet.travail_commune
+  }</b><br>2014_extra_travail_commune: ${trajet['2014_extra_travail_commune']}`;
+  const reverseArcLabel = reverseArc
+    ? ` <b>${reverseArc.commune}->${
+        reverseArc.travail_commune
+      }</b><br>2014_extra_travail_commune: ${
+        reverseArc['2014_extra_travail_commune']
+      }`
+    : '';
+  L.polyline(mainLine, {
+    color: '#fff',
+    weight: segmentWidth + 3,
+    opacity: 1,
+    offset: -(weightDestExtra - weightSrcExtra) / 2
+  } as any)
+    .bindTooltip(srcArcLabel + '<br>' + reverseArcLabel)
+    .addTo(lineInlines);
+
+  L.polyline(mainLine, {
+    color: 'green',
+    weight: weightSrcExtra,
+    opacity: 0.5,
+    offset: weightSrcExtra / 2 + 1
+  } as any)
+    .bindTooltip(srcArcLabel)
+    .addTo(lineArcs);
+
+  if (reverseArc) {
+    L.polyline(mainLine, {
+      color: 'red',
+      weight: weightDestExtra,
+      opacity: 0.5,
+      offset: -(weightDestExtra / 2 + 1)
+    } as any)
+      .bindTooltip(reverseArcLabel)
+      .addTo(lineArcs);
+  }
 }
 function main() {
   var map = addOpenStreetMapLayer();
@@ -256,12 +331,20 @@ function main() {
 
   processData(communes);
 
+  // manage overlays in groups to ease superposition order
+  let lineOutlines = L.layerGroup();
+  let lineInlines = L.layerGroup();
+  let lineArcs = L.layerGroup();
+  let markerLayer = L.layerGroup();
+  markerLayer.addTo(map);
+  markerLayer.setZIndex(-9999);
+
   if (features.showCommuneMarkers) {
     // let nbMaxHeures = 0;
     // communes.forEach(commune => {
     //   nbMaxHeures = Math.max(nbMaxHeures, commune['2014_1'] || 0);
     // });
-
+  
     const infoDomElement = document.getElementById('info');
     function markerOnClick(event: Event) {
       var props = event.target['properties'];
@@ -270,26 +353,55 @@ function main() {
       }
 
       if (features.showArcs) {
-        const codeInseeFilter = event.target['INSEE_COM'];
-        trajets
-          .filter(
-            trajet =>
-              trajet.insee ===codeInseeFilter||
-              trajet.travail_insee === codeInseeFilter
-          )
-          .forEach(trajet => {
-            renderArcs(map, trajet, communeLatLongs, codeInseeFilter);
-          });
+        if (lineOutlines) {
+          map.removeLayer(lineOutlines);
+          map.removeLayer(lineInlines);
+          map.removeLayer(lineArcs);
 
-        communes.forEach(commune => {
-          renderInterPerCommune(map, commune);
+          lineOutlines = L.layerGroup();
+          lineInlines = L.layerGroup();
+          lineArcs = L.layerGroup();
+        }
+
+        const codeInseeFilter = event.target['INSEE_COM'];
+        const filteredTravelsDest = trajets.filter(
+          trajet => trajet.travail_insee === codeInseeFilter
+        );
+
+        const filteredTravelsSrc = trajets.filter(
+          trajet => trajet.insee === codeInseeFilter
+        );
+
+        filteredTravelsSrc.forEach(trajet => {
+          renderArcs(
+            lineOutlines,
+            lineInlines,
+            lineArcs,
+            trajet,
+            communeLatLongs,
+            codeInseeFilter,
+            filteredTravelsDest
+          );
         });
+
+        lineOutlines.addTo(map);
+        lineInlines.addTo(map);
+        lineArcs.addTo(map);
+
+        filteredTravelsSrc.forEach(trajet => {
+          const commune: Commune = communes.find(commune=>commune.INSEE_COM === trajet.travail_insee)
+          renderInterPerCommune(lineOutlines, lineInlines, lineArcs, commune, 'lightblue');
+        });
+
+        const commune: Commune = communes.find(commune=>commune.INSEE_COM === codeInseeFilter)
+        renderInterPerCommune(lineOutlines, lineInlines, lineArcs, commune, 'blue');
       }
     }
-
     communes.forEach(commune => {
-      renderMarkerPerCommune(map, commune, markerOnClick);
+      renderMarkerPerCommune(markerLayer, commune, markerOnClick);
     });
+
+   
   }
 }
 
