@@ -6,7 +6,7 @@ module.exports = (env, argv) => {
     context: path.resolve(__dirname, './'),
 
     entry: {
-      app: './src/leaf-demo.ts'
+      app: './src/main.ts'
     },
 
     output: {
@@ -34,7 +34,9 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new CopyPlugin([
-        { from: './node_modules/leaflet/dist/leaflet.css', to: 'leaflet' }
+        { from: './node_modules/leaflet/dist/leaflet.css', to: 'leaflet' },
+        { from: './node_modules/leaflet-polylineoffset/leaflet.polylineoffset.js', to: 'leaflet'},
+        { from: './node_modules/leaflet-ant-path/dist/leaflet-ant-path.js', to: 'leaflet'}
       ])
     ]
   };

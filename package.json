@@ -8,6 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "leaflet": "^1.4.0",
+    "leaflet-ant-path": "^1.2.1",
     "leaflet-polylineoffset": "^1.1.1"
   },
   "prettier": {
