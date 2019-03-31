@@ -3,8 +3,7 @@ import { Commune } from '../model/commune';
 import { Trajet } from '../model/trajet';
 import { nbPeopleToStrokeWeight } from './marker.converters';
 import { CommuneLatLongs } from '../main';
-const trajetInterMarkerRadiusPx = 20;
-const useAnimation = false;
+
 export function renderInterPerCommune(
   lineOutlines: L.LayerGroup,
   lineInlines: L.LayerGroup,
@@ -24,7 +23,7 @@ export function renderInterPerCommune(
     radius: weight + weight / 2 + 3,
     weight: 1,
     opacity: 1
-  }).addTo(lineInlines);
+  }).addTo(lineOutlines);
   new L.CircleMarker([commune.longitude, commune.latitude], {
     color: `white`,
     radius: weight + weight / 2 + 2,
@@ -33,39 +32,19 @@ export function renderInterPerCommune(
     fill: true,
     fillOpacity: 1.0,
     fillColor: 'white'
-  }).addTo(lineInlines);
+  }).addTo(lineOutlines);
 
-  if (useAnimation) {
-    (L.polyline as any)
-      .antPath([commune.longitude, commune.latitude], {
-        use: L.circle,
-        delay: 400,
-        dashArray: [10, 20],
-        weight: 5,
-        color: '#0000FF',
-        pulseColor: '#FFFFFF',
-        paused: false,
-        reverse: true,
-        hardwareAccelerated: true,
-        radius: 300
-      })
-      .bindTooltip(
-        ` <b>${commune.commune}</b><br>2014_inter: ${commune['2014_inter']}`
-      )
-      .addTo(lineArcs);
-  } else {
-    new L.CircleMarker([commune.longitude, commune.latitude], {
-      color: color,
-      radius: weight,
-      weight: weight,
-      opacity: 1,
-      fill: false
-    })
-      .bindTooltip(
-        ` <b>${commune.commune}</b><br>2014_inter: ${commune['2014_inter']}`
-      )
-      .addTo(lineArcs);
-  }
+  new L.CircleMarker([commune.longitude, commune.latitude], {
+    color: color,
+    radius: weight,
+    weight: weight,
+    opacity: 1,
+    fill: false
+  })
+    .bindTooltip(
+      ` <b>${commune.commune}</b><br>2014_inter: ${commune['2014_inter']}`
+    )
+    .addTo(lineArcs);
 
   new L.CircleMarker([commune.longitude, commune.latitude], {
     color: `black`,
@@ -146,59 +125,24 @@ export function renderArcs(
     .bindTooltip(srcArcLabel + '<br>' + reverseArcLabel, { sticky: true })
     .addTo(lineInlines);
 
-  if (useAnimation) {
-    (L.polyline as any)
-      .antPath(mainLine, {
-        color: 'green',
-        weight: weightSrcExtra,
-        opacity: 1,
-        offset: weightSrcExtra / 2 + 1,
-        use: L.polyline,
-        delay: 800,
-        dashArray: [10, 20],
-        hardwareAccelerated: true,
-        pulseColor: '#AAA'
-      } as any)
-      .bindTooltip(srcArcLabel, { sticky: true })
-      .addTo(lineArcs);
+  L.polyline(mainLine, {
+    color: 'green',
+    weight: weightSrcExtra,
+    opacity: 1,
+    offset: weightSrcExtra / 2 + 1
+  } as any)
+    .bindTooltip(srcArcLabel, { sticky: true })
+    .addTo(lineArcs);
 
-    if (reverseArc) {
-      (L.polyline as any)
-        .antPath(mainLine, {
-          color: 'red',
-          weight: weightDestExtra,
-          opacity: 1,
-          offset: -(weightDestExtra / 2 + 1),
-          use: L.polyline,
-          reverse: true,
-          delay: 800,
-          dashArray: [10, 20],
-          hardwareAccelerated: true,
-          pulseColor: '#AAA'
-        } as any)
-        .bindTooltip(reverseArcLabel, { sticky: true })
-        .addTo(lineArcs);
-    }
-  } else {
+  if (reverseArc) {
     L.polyline(mainLine, {
-      color: 'green',
-      weight: weightSrcExtra,
+      color: 'red',
+      weight: weightDestExtra,
       opacity: 1,
-      offset: weightSrcExtra / 2 + 1
+      offset: -(weightDestExtra / 2 + 1),
+      use: L.polyline
     } as any)
-      .bindTooltip(srcArcLabel, { sticky: true })
+      .bindTooltip(reverseArcLabel, { sticky: true })
       .addTo(lineArcs);
-
-    if (reverseArc) {
-      L.polyline(mainLine, {
-        color: 'red',
-        weight: weightDestExtra,
-        opacity: 1,
-        offset: -(weightDestExtra / 2 + 1),
-        use: L.polyline
-      } as any)
-        .bindTooltip(reverseArcLabel, { sticky: true })
-        .addTo(lineArcs);
-    }
   }
 }

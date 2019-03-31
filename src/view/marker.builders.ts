@@ -41,7 +41,11 @@ export class MarkerUtils {
         @param {Number} the length ratio, expressed as a decimal between 0 and 1, inclusive.
         @returns {L.Point} the interpolated point.
     */
-  static interpolateOnPointSegment = (pA: { x: number; y: number; }, pB: { x: number; y: number; }, ratio: number) => {
+  static interpolateOnPointSegment = (
+    pA: { x: number; y: number },
+    pB: { x: number; y: number },
+    ratio: number
+  ) => {
     return L.point(
       pA.x * (1 - ratio) + ratio * pB.x,
       pA.y * (1 - ratio) + ratio * pB.y
@@ -147,8 +151,7 @@ export class MarkerUtils {
     // project the LatLngs as Points,
     // and compute total planar length of the line at max precision
     var maxzoom = map.getMaxZoom();
-    if (maxzoom === Infinity) 
-    maxzoom = map.getZoom();
+    if (maxzoom === Infinity) maxzoom = map.getZoom();
     var pts = [];
     var lineLength = 0;
     for (var i = 0; i < n; i++) {
@@ -235,15 +238,16 @@ export class MarkerUtils {
     return L.latLng([lat2 * toDeg, lon2]);
   };
 
-  private static buildArcCircle = (
+  static buildArcCircle = (
     center: [number, number],
     radiusMeter: number,
     startAngleRad: number,
-    endAngleRad: number
+    endAngleRad: number,
+    nbSides = MarkerUtils.nbSides
   ): Array<[number, number]> => {
     const points: Array<[number, number]> = [];
 
-    const arcIncrement = (2 * Math.PI) / MarkerUtils.nbSides;
+    const arcIncrement = (2 * Math.PI) / nbSides;
 
     for (
       let angle = startAngleRad;

@@ -18,6 +18,8 @@ with open(path+'maps/par_commune.geojson') as json_file:
             rowOut=p['properties']
             # fix INSEE type
             rowOut['INSEE_COM']=int(rowOut['INSEE_COM'])
+            # income per month
+            rowOut['revenu_median']=int(rowOut['revenu_median'])/ 12
             townsOut.append(rowOut)
 
 # sort

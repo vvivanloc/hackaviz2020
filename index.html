@@ -1,26 +1,84 @@
 <!DOCTYPE html>
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
   <head profile="http://gmpg.org/xfn/11">
-    <title>Hackaviz 2019</title>
+    <title>Jobastre - Hackaviz 2019</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="leaflet/leaflet.css" />
     <link rel="stylesheet" type="text/css" href="main.css" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> 
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
-    <h1>Proto</h1>
-<div class='column'>
-    <div id="map" style="width: 800px; height: 440px; border: 1px solid #AAA;"></div>
-    <div id="info"></div>
+    <h1>Jobastre</h1>
+    <h2>Où ça ?</h2>
+    <div class="column">
+      <div
+        class="map"
+        id="mapJob"
+      ></div>
+      <div class="info" id="infoCSP">
+        <div id="csp1">
+          "CADRES Catégorie1<br />
+          22 : Commerçants et assimilés<br />
+          23 : Chefs d'entreprise de 10 salariés ou plus<br />
+          31 : Professions libérales et assimilés<br />
+          32 : Cadres de la fonction publique, professions intellectuelles et
+          artistiques<br />
+          36 : Cadres d'entreprise<br />
+        </div>
+        <div id="csp2">
+          PROFESSIONS INTERMEDIAIRES Catégorie 2<br />
+          # 41 : Professions intermédiaires de l'enseignement, de la santé, de
+          la fonction publique et assimilés<br />
+          # 46 : Professions intermédiaires administratives et commerciales des
+          entreprises<br />
+          # 47 : Techniciens<br />
+          # 48 : Contremaîtres, agents de maîtrise<br />
+          # 21 : Artisans<br />
+          # 10 : Agriculteurs exploitants<br />
+        </div>
+        <div id="csp3">
+          EMPLOYES/OUVRIERS Catégorie 3<br />
+          # 56 : Personnels des services directs particuliers<br />
+          # 55 : Employés de commerce<br />
+          # 54 : Employés administratifs d'entreprise<br />
+          # 51 : Employés de la fonction publique<br />
+          # 61 : Ouvriers qualifiés<br />
+          # 66 : Ouvriers non qualifiés<br />
+          # 69 : Ouvriers agricoles<br />
+        </div>
+      </div>
+    </div>
+    <h2>Vélo, métro ou auto ?</h2>
+    <div class="column">
+    <div
+      id="mapTransportationMean"
+      class="map"
+    ></div>
+    <div class="info" id="infoTransport"></div>
   </div>
-    <!-- <script type='text/javascript' src='maps/par_commune.geojson.js'></script>  -->
-    <script type='text/javascript' src='maps/par_commune.js'></script> 
-    <script type='text/javascript' src='maps/par_trajet.js'></script> 
-    <script type='text/javascript' src='bundle.js'></script> 
-    <!-- leaflet plugins -->
-    <script type='text/javascript' src='leaflet/leaflet.polylineoffset.js'></script> 
-    <script type='text/javascript' src='leaflet/leaflet-ant-path.js'></script> 
+    <h2>Auto</h2>
+    <div class="column">
+      <div
+        id="mapCarTraffic"
+        class="map"
+      ></div>
+      <div class="info" id="info"></div>
+    </div>
+    <script type="text/javascript" src="maps/par_commune.js"></script>
+    <script type="text/javascript" src="maps/par_trajet.js"></script>
+    <!-- <script type="text/javascript" src="leaflet/leaflet.js"></script> -->
+  
+    
+    
+
+    <script type="text/javascript" src="bundle.js"></script>
+      <!-- leaflet plugins -->
+    <script
+      type="text/javascript"
+      src="leaflet/leaflet.polylineoffset.js"
+    ></script>
+    <!-- <script type="text/javascript" src="leaflet/leaflet-ant-path.js"></script> -->
   </body>
 </html>

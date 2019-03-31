@@ -27,6 +27,7 @@ module.exports = (env, argv) => {
           loader: 'ts-loader'
         },
         {
+          // FIXME
           test: /\.less$/,
           loader: 'less-loader'
         }
@@ -35,8 +36,11 @@ module.exports = (env, argv) => {
     plugins: [
       new CopyPlugin([
         { from: './node_modules/leaflet/dist/leaflet.css', to: 'leaflet' },
-        { from: './node_modules/leaflet-polylineoffset/leaflet.polylineoffset.js', to: 'leaflet'},
-        { from: './node_modules/leaflet-ant-path/dist/leaflet-ant-path.js', to: 'leaflet'}
+        {
+          from:
+            './node_modules/leaflet-polylineoffset/leaflet.polylineoffset.js',
+          to: 'leaflet'
+        }
       ])
     ]
   };
