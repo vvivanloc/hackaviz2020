@@ -10,17 +10,21 @@ import {
   hideInfoCSP,
   renderJobMarkerPerCommune,
   toggleLayerVisibility
-} from './view/town.job.renderer';
-import { renderCarTrafficMarkerPerCommune } from './view/town.car.traffic.renderer';
+} from './view/job/town.renderer';
+import { renderCarTrafficMarkerPerCommune } from './view/carTraffic/town.renderer';
 
 import {
-  renderArcs,
-  renderInterPerCommune
-} from './view/travel.car.traffic.renderer';
+  renderTrafficInOutArcs,
+  renderTrafficInterPerCommune
+} from './view/carTraffic/travel.renderer';
+
+import { renderMeanTransportationMarkerPerCommune } from './view/mean/town.renderer';
 
 import {
-renderMeanTransportationMarkerPerCommune
-} from './view/town.mean.renderer';
+  renderMeanBikeCarArcs,
+  renderMeanPerCommune
+} from './view/mean/travel.renderer';
+
 // -1 for all
 const nbMaxCommunes: number = -1;
 
@@ -56,7 +60,6 @@ function createOpenStreetMapLayer(mapDivId: string): L.Map {
 }
 
 function buildIncomeMap() {
-
   hideInfoCSP();
   const map = createOpenStreetMapLayer('mapJob');
   let jobLayer = L.layerGroup();
@@ -75,7 +78,6 @@ function buildIncomeMap() {
     );
   });
 
-
   toggleLayerVisibility(map.getZoom());
   map.on('zoomend', function() {
     toggleLayerVisibility(map.getZoom());
@@ -84,13 +86,6 @@ function buildIncomeMap() {
 
 function buildTransportationMeanMap() {
   const map = createOpenStreetMapLayer('mapTransportationMean');
-  let transportLayer = L.layerGroup();
-  communes.forEach(commune => {
-    renderMeanTransportationMarkerPerCommune(map,transportLayer, commune);
-  })
-}
-function buildCarTrafficMap() {
-  const map = createOpenStreetMapLayer('mapCarTraffic');
 
   // manage overlays in groups to ease superposition order
   let lineOutlines = L.layerGroup();
@@ -98,19 +93,19 @@ function buildCarTrafficMap() {
   let lineArcs = L.layerGroup();
   let markerLayer = L.layerGroup();
   markerLayer.addTo(map);
-  map.on('click', layerOnClick)
- 
-  function layerOnClick(_event: Event) {
-    
-    if (lineOutlines) {
-      map.removeLayer(lineOutlines);
-      map.removeLayer(lineInlines);
-      map.removeLayer(lineArcs);
-    }
-  }
-  const infoDomElement = document.getElementById('info');
- 
-  function markerOnClick(event: Event) {
+  // map.on('click', layerOnClick);
+
+  // function layerOnClick(_event: Event) {
+  //   debugger;
+  //   if (lineOutlines) {
+  //     map.removeLayer(lineOutlines);
+  //     map.removeLayer(lineInlines);
+  //     map.removeLayer(lineArcs);
+  //   }
+  // }
+  const infoDomElement = document.getElementById('infoMean');
+
+  function markerMeanOnClick(event: Event) {
     var props = event.target['properties'];
     if (infoDomElement) {
       infoDomElement.innerHTML = props.join('<br>');
@@ -132,7 +127,7 @@ function buildCarTrafficMap() {
       trajet => trajet.insee === codeInseeFilter
     );
     filteredTravelsSrc.forEach(trajet => {
-      renderArcs(
+      renderMeanBikeCarArcs(
         lineOutlines,
         lineInlines,
         lineArcs,
@@ -149,7 +144,7 @@ function buildCarTrafficMap() {
       const commune: Commune = communes.find(
         commune => commune.INSEE_COM === trajet.travail_insee
       );
-      renderInterPerCommune(
+      renderMeanPerCommune(
         lineOutlines,
         lineInlines,
         lineArcs,
@@ -160,14 +155,103 @@ function buildCarTrafficMap() {
     const commune: Commune = communes.find(
       commune => commune.INSEE_COM === codeInseeFilter
     );
-    renderInterPerCommune(lineOutlines, lineInlines, lineArcs, commune, 'blue');
+    renderMeanPerCommune(lineOutlines, lineInlines, lineArcs, commune, 'blue');
+  }
+
+  communes.forEach(commune => {
+    renderMeanTransportationMarkerPerCommune(
+      markerLayer,
+      commune,
+      markerMeanOnClick
+    );
+  });
+}
+function buildCarTrafficMap() {
+  const map = createOpenStreetMapLayer('mapCarTraffic');
+
+  // manage overlays in groups to ease superposition order
+  let lineOutlines = L.layerGroup();
+  let lineInlines = L.layerGroup();
+  let lineArcs = L.layerGroup();
+  let markerLayer = L.layerGroup();
+  markerLayer.addTo(map);
+  map.on('click', layerOnClick);
+
+  function layerOnClick(_event: Event) {
+    if (lineOutlines) {
+      map.removeLayer(lineOutlines);
+      map.removeLayer(lineInlines);
+      map.removeLayer(lineArcs);
+    }
+  }
+  const infoDomElement = document.getElementById('infoTraffic');
+
+  function markerTrafficOnClick(event: Event) {
+    var props = event.target['properties'];
+    if (infoDomElement) {
+      infoDomElement.innerHTML = props.join('<br>');
+    }
+
+    if (lineOutlines) {
+      map.removeLayer(lineOutlines);
+      map.removeLayer(lineInlines);
+      map.removeLayer(lineArcs);
+      lineOutlines = L.layerGroup();
+      lineInlines = L.layerGroup();
+      lineArcs = L.layerGroup();
+    }
+    const codeInseeFilter = event.target['INSEE_COM'];
+    const filteredTravelsDest = trajets.filter(
+      trajet => trajet.travail_insee === codeInseeFilter
+    );
+    const filteredTravelsSrc = trajets.filter(
+      trajet => trajet.insee === codeInseeFilter
+    );
+    filteredTravelsSrc.forEach(trajet => {
+      renderTrafficInOutArcs(
+        lineOutlines,
+        lineInlines,
+        lineArcs,
+        trajet,
+        communeLatLongs,
+        codeInseeFilter,
+        filteredTravelsDest
+      );
+    });
+    lineOutlines.addTo(map);
+    lineInlines.addTo(map);
+    lineArcs.addTo(map);
+    filteredTravelsSrc.forEach(trajet => {
+      const commune: Commune = communes.find(
+        commune => commune.INSEE_COM === trajet.travail_insee
+      );
+      renderTrafficInterPerCommune(
+        lineOutlines,
+        lineInlines,
+        lineArcs,
+        commune,
+        'lightblue'
+      );
+    });
+    const commune: Commune = communes.find(
+      commune => commune.INSEE_COM === codeInseeFilter
+    );
+    renderTrafficInterPerCommune(
+      lineOutlines,
+      lineInlines,
+      lineArcs,
+      commune,
+      'blue'
+    );
   }
   communes.forEach(commune => {
-    renderCarTrafficMarkerPerCommune(markerLayer, commune, markerOnClick);
+    renderCarTrafficMarkerPerCommune(
+      markerLayer,
+      commune,
+      markerTrafficOnClick
+    );
   });
-  
 }
-
 
 function main() {
   processData(communes);

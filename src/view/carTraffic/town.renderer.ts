@@ -1,7 +1,7 @@
 import L from 'leaflet';
-import { Commune } from '../model/commune';
-import { MarkerUtils } from './marker.builders';
-import { hoursToHue, nbJobsToRadius } from './marker.converters';
+import { Commune } from '../../model/commune';
+import { MarkerUtils } from '../marker.builders';
+import { hoursToHue, nbJobsToRadius } from '../../model/value.mappers';
 function buildMarker(
   markerLayer: L.LayerGroup,
   commune: Commune,

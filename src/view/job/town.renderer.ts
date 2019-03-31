@@ -1,6 +1,6 @@
 import L from 'leaflet';
-import { Commune } from '../model/commune';
-import { nbJobsToRadius, incomeToHeight } from './marker.converters';
+import { Commune } from '../../model/commune';
+import { nbJobsToRadius, incomeToHeight } from '../../model/value.mappers';
 
 function extendSemiCircle() {
   // from Leaflet semi-circle plugin
@@ -311,15 +311,6 @@ function addJobPool(
       angleEnd =
         angleStart + (commune[`2015_inter_csp${i + 1}`] / sumCsp) * 360;
 
-      // let arc: Array<[number, number]> =[[commune.longitude, commune.latitude]];
-      // arc=arc.concat(MarkerUtils.buildArcCircle(
-      //     [commune.longitude, commune.latitude],
-      //     radius,
-      //     angleStart-epsilon,
-      //     angleEnd+epsilon,
-      //     20
-      //   ))
-
       const segment = (L as any)
         .semiCircle([commune.longitude, commune.latitude], {
           radius: radius * 0.75,
@@ -339,15 +330,7 @@ function addJobPool(
       segment.on('mouseover', markerOnClick);
 
       markerGroup.push(
-        // L.polygon(
-        //     arc ,
-        //   {
-        //     color: `hsl(${colors[i]}, 100%, 25%)`,
-        //     fillColor: `hsl(${colors[i]}, 100%, 75%)`,
-        //     fillOpacity: 0.5
-        //   }
-        // )
-        segment
+          segment
       );
       angleStart = angleEnd;
     }

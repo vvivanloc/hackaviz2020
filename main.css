@@ -12,3 +12,6 @@
 .column #info {
   width: 200px;
 }
+.strikethru {
+  text-decoration: line-through;
+}

@@ -13,10 +13,7 @@
     <h1>Jobastre</h1>
     <h2>Où ça ?</h2>
     <div class="column">
-      <div
-        class="map"
-        id="mapJob"
-      ></div>
+      <div class="map" id="mapJob"></div>
       <div class="info" id="infoCSP">
         <div id="csp1">
           "CADRES Catégorie1<br />
@@ -50,31 +47,22 @@
         </div>
       </div>
     </div>
-    <h2>Vélo, métro ou auto ?</h2>
+    <h2>Vélo <span class='strikethru'>, métro</span> ou auto ?</h2>
     <div class="column">
-    <div
-      id="mapTransportationMean"
-      class="map"
-    ></div>
-    <div class="info" id="infoTransport"></div>
-  </div>
+      <div id="mapTransportationMean" class="map"></div>
+      <div class="info" id="infoMean"></div>
+    </div>
     <h2>Auto</h2>
     <div class="column">
-      <div
-        id="mapCarTraffic"
-        class="map"
-      ></div>
-      <div class="info" id="info"></div>
+      <div id="mapCarTraffic" class="map"></div>
+      <div class="info" id="infoTraffic"></div>
     </div>
     <script type="text/javascript" src="maps/par_commune.js"></script>
     <script type="text/javascript" src="maps/par_trajet.js"></script>
     <!-- <script type="text/javascript" src="leaflet/leaflet.js"></script> -->
-  
-    
-    
 
     <script type="text/javascript" src="bundle.js"></script>
-      <!-- leaflet plugins -->
+    <!-- leaflet plugins -->
     <script
       type="text/javascript"
       src="leaflet/leaflet.polylineoffset.js"

@@ -1,11 +1,11 @@
 import L from 'leaflet';
-import { Commune } from '../model/commune';
-import { nbJobsToRadius } from './marker.converters';
+import { Commune } from '../../model/commune';
+import { nbJobsToRadius } from '../../model/value.mappers';
 
 export function renderMeanTransportationMarkerPerCommune(
-  map: L.Map,
-  transportLayer: L.LayerGroup,
-  commune: Commune
+  markerLayer: L.LayerGroup,
+  commune: Commune,
+  markerOnClick: (event: Event) => void
 ) {
   const popupAttributes = [
     'emplois',
@@ -15,26 +15,30 @@ export function renderMeanTransportationMarkerPerCommune(
     '2015_inter_csp3'
   ];
 
-  addTownMarker(map, commune, popupAttributes, transportLayer);
+  addTownMarker(markerLayer, commune, popupAttributes, markerOnClick);
 }
 
 function addTownMarker(
-  map: L.Map,
+  markerLayer: L.LayerGroup,
   commune: Commune,
   popupAttributes: Array<string>,
-  transportLayer: L.LayerGroup<any>
+  markerOnClick: (event: Event) => void
 ) {
   const radius = nbJobsToRadius(commune[popupAttributes[0]]);
   let popupLabel = popupAttributes
     .map(popupAttribute => popupAttribute + ': ' + commune[popupAttribute])
     .join('<br>');
 
-  L.circle([commune.longitude, commune.latitude], {
+  const marker = L.circle([commune.longitude, commune.latitude], {
     radius: radius,
     color: `gray`,
     fillColor: `gray`,
     fillOpacity: 0.5
   })
     .bindTooltip(` <b>${commune.commune}</b><br>${popupLabel}`)
-    .addTo(map);
+    .on('click', markerOnClick)
+    .addTo(markerLayer);
+  const props = JSON.stringify(commune).split(',');
+  marker['properties'] = props;
+  marker['INSEE_COM'] = commune.INSEE_COM;
 }

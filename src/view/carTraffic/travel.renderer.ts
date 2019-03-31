@@ -1,10 +1,10 @@
 import L from 'leaflet';
-import { Commune } from '../model/commune';
-import { Trajet } from '../model/trajet';
-import { nbPeopleToStrokeWeight } from './marker.converters';
-import { CommuneLatLongs } from '../main';
+import { Commune } from '../../model/commune';
+import { Trajet } from '../../model/trajet';
+import { nbPeopleToStrokeWeight } from '../../model/value.mappers';
+import { CommuneLatLongs } from '../../main';
 
-export function renderInterPerCommune(
+export function renderTrafficInterPerCommune(
   lineOutlines: L.LayerGroup,
   lineInlines: L.LayerGroup,
   lineArcs: L.LayerGroup,
@@ -66,7 +66,7 @@ export function renderInterPerCommune(
   }).addTo(lineInlines);
 }
 
-export function renderArcs(
+export function renderTrafficInOutArcs(
   lineOutlines: L.LayerGroup,
   lineInlines: L.LayerGroup,
   lineArcs: L.LayerGroup,
