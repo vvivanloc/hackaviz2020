@@ -2677,20 +2677,10 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
-leaflet-ant-path@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/leaflet-ant-path/-/leaflet-ant-path-1.2.1.tgz#214bebb0ffa20dfa3e5e1962803df0f0216f70ce"
-  integrity sha512-aI9mmNiHKi0i4t62TFncKJTkPiC3Vciqro8thknOMDStsi2WszWmQFFgAZeMbbICC3yZY1EXrBQUPS9aoAm9zQ==
-
 leaflet-polylineoffset@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/leaflet-polylineoffset/-/leaflet-polylineoffset-1.1.1.tgz#021b717d4f7d462f742c1ac1ac0e83e8eef74615"
   integrity sha512-WcEjAROx9IhIVwSMoFy9p2QBCG9YeuGtJl4ZdunIgj4xbCdTrUkBj8JdonUeCyLPnD2/Vrem/raOPHm5LvebSw==
-
-leaflet-semicircle@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/leaflet-semicircle/-/leaflet-semicircle-2.0.3.tgz#e801567d2dd3511c33dcf1827de7d1db3f73c905"
-  integrity sha512-cuUC6BrgUiepier5YYV5TW7cUw2AsO3pyCNViOocu+u6fmYW0Qd8S4AeUyLYqCnf+TDeCmkVMrpO2yxwj9c4uQ==
 
 leaflet@^1.4.0:
   version "1.4.0"
