@@ -1,16 +1,19 @@
-Leaflet Example
+**Hackviz 2009**
 --
 
-Example of creating an interactive map with [Leaflet](http://leafletjs.com) and [OpenStreetMap](https://www.openstreetmap.org).
 
-See my blog post for details: http://asmaloney.com/2014/01/code/creating-an-interactive-map-with-leaflet-and-openstreetmap/
+Data source 
+- Hackaviz 2019 team
 
-(The image icons came from here: [clker.com](http://www.clker.com/clipart-google-maps-pin-blue.html))
+Data analysis
+- LibreOffice calc
+- Prototype written in Typescript with Leaflet + OpenStreetMap based on [Andy Moloney](http://asmaloney.com/2014/01/code/creating-an-interactive-map-with-leaflet-and-openstreetmap/)
 
-23 January 2014  
-Andy Maloney  
-https://asmaloney.com
+Data vizualisation
 
-based also on 
-Typescript Leaflet Template
-https://github.com/oardi/leaflet-typescript-template
+- Typescript Leaflet Template [Ardian Shala](https://github.com/oardi/leaflet-typescript-template)
+- Leaflet plugins (GeometryUtil, SemiCircle & PolylineOffset)
+- Pure CSS tooltip
+- VSCode, Gimp, Inkscape
+
+*Vincent*

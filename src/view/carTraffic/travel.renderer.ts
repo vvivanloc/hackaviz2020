@@ -12,12 +12,7 @@ export function renderTrafficInterPerCommune(
   color: string
 ) {
   const weight = Math.max(3, nbPeopleToStrokeWeight(commune['2014_inter']));
-  // L.circleMarker([commune.longitude, commune.latitude], {
-  //   color: `black`,
-  //   radius: trajetInterMarkerRadiusPx,
-  //   weight: weight + 5,
-  //   opacity: 1
-  // }).addTo(lineOutlines);
+ 
   new L.CircleMarker([commune.longitude, commune.latitude], {
     color: `black`,
     radius: weight + weight / 2 + 3,
@@ -42,7 +37,7 @@ export function renderTrafficInterPerCommune(
     fill: false
   })
     .bindTooltip(
-      ` <b>${commune.commune}</b><br>2014_inter: ${commune['2014_inter']}`
+      ` <b>${commune.commune}</b><br>Actifs résidents: ${commune['2014_inter']} personnes`
     )
     .addTo(lineArcs);
 
@@ -107,13 +102,13 @@ export function renderTrafficInOutArcs(
   } as any).addTo(lineOutlines);
   const srcArcLabel = ` <b>${trajet.commune}->${
     trajet.travail_commune
-  }</b><br>2014_extra_travail_commune: ${trajet['2014_extra_travail_commune']}`;
+  }</b><br>Actifs: ${Number(trajet['2014_extra_travail_commune']).toLocaleString('fr-FR')} personnes`;
   const reverseArcLabel = reverseArc
     ? ` <b>${reverseArc.commune}->${
         reverseArc.travail_commune
-      }</b><br>2014_extra_travail_commune: ${
-        reverseArc['2014_extra_travail_commune']
-      }`
+      }</b><br>Actifs: ${
+        Number(reverseArc['2014_extra_travail_commune']).toLocaleString('fr-FR')
+      } personnes`
     : '';
 
   L.polyline(mainLine, {

@@ -4,7 +4,8 @@ import { Trajet } from '../../model/trajet';
 import {
   nbPeopleToStrokeWeight,
   timeToHue,
-  timeGainToHue
+  timeGainToHue,
+  floatToStr
 } from '../../model/value.mappers';
 import { CommuneLatLongs } from '../../main';
 import { speedToHue } from '../../model/value.mappers';
@@ -42,7 +43,7 @@ export function renderMeanPerCommune(
     fill: false
   })
     .bindTooltip(
-      ` <b>${commune.commune}</b><br>2014_inter: ${commune['2014_inter']}`
+      ` <b>${commune.commune}</b><br>Actifs: ${commune["2015_1"]} personnes`
     )
     .addTo(lineArcs);
 
@@ -115,30 +116,31 @@ export function renderMeanBikeCarArcs(
   const speedCar = (trajet.distance_auto_km / trajet.duree_auto_minutes) * 60;
   const timeGain = timeCar / timeBike;
 
+  
   let srcArcLabel =
-    ` <b>${trajet.commune}->${
+    ` <b>${trajet.commune}<->${
       trajet.travail_commune
-    }</b><br>timeBike: ${timeBike} mn<br>` +
-    `timeCar: ${timeCar} mn` +
-    `<br>time gain: ${timeGain} x` +
-    `<br>speedBike: ${speedBike} km/h<br>` +
-    `speedCar: ${speedCar} km/h`;
+    }</b><br>Temps en vélo: ${Number(timeBike).toLocaleString('fr-FR')} mn<br>` +
+    `Temps en voiture: ${Number(timeCar).toLocaleString('fr-FR')} mn` +
+    `<br>Gain de temps en voiture: x${floatToStr(timeGain)}` +
+    `<br>Vitesse en vélo: ${floatToStr(speedBike)} km/h<br>` +
+    `Vitesse en voiture: ${floatToStr(speedCar)} km/h`;
 
   srcArcLabel =
     srcArcLabel +
     ` <br> <b>${trajet.commune}->${
       trajet.travail_commune
-    }</b><br>2014_extra_travail_commune: ${
-      trajet['2014_extra_travail_commune']
-    }`;
+    }</b><br>Actifs: ${
+      Number(trajet['2014_extra_travail_commune']).toLocaleString('fr-FR')
+    } personnes`;
   if (reverseArc) {
     srcArcLabel =
       srcArcLabel + 
         ` <br><b>${reverseArc.commune}->${
             reverseArc.travail_commune
-          }</b><br>2014_extra_travail_commune: ${
+          }</b><br>Actifs: ${
             reverseArc['2014_extra_travail_commune']
-          }`
+          }  personnes`
         ;
   }
   L.polyline(mainLine, {

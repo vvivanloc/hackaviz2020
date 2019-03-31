@@ -1,6 +1,6 @@
 export function incomeToHeight(incomeMonthEuros: number) {
   let height = 0;
-  if (incomeMonthEuros <= 0) {
+  if (incomeMonthEuros <= 1300) {
     height = 0;
   } else if (incomeMonthEuros < 1400) {
     height = 1;
@@ -8,8 +8,10 @@ export function incomeToHeight(incomeMonthEuros: number) {
     height = 2;
   } else if (incomeMonthEuros < 1800) {
     height = 3;
-  } else {
+  } else if (incomeMonthEuros < 2000) {
     height = 4;
+  } else  {
+    height = 5;
   }
   return height;
 }
@@ -59,6 +61,22 @@ export function nbPeopleToStrokeWeight(nbPeople: number) {
   return weight;
 }
 
+export function nbPeopleToRadius(nbPeople: number) {
+  let radius = 1;
+  if (nbPeople < 1000) {
+    radius = 3;
+  } else if (nbPeople < 5000) {
+    radius = 7;
+  } else if (nbPeople < 10000) {
+    radius = 10;
+  } else if (nbPeople < 100000) {
+    radius = 20;
+  } else {
+    radius = 30;
+  }
+  return 100*radius;
+}
+
 export function speedToHue(speedKmH: number) {
   let hue = 0;
   if (speedKmH < 40) {
@@ -92,3 +110,5 @@ export function timeGainToHue(timeGain: number) {
   } else hue = 120;
   return hue;
 }
+
+export const floatToStr= (value:number, maximumFractionDigits =2)=> Number(value).toLocaleString('fr-FR',{maximumFractionDigits:maximumFractionDigits});

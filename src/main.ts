@@ -7,7 +7,6 @@ import { Commune } from './model/commune';
 import { Trajet } from './model/trajet';
 
 import {
-  hideInfoCSP,
   renderJobMarkerPerCommune,
   toggleLayerVisibility
 } from './view/job/town.renderer';
@@ -60,7 +59,6 @@ function createOpenStreetMapLayer(mapDivId: string): L.Map {
 }
 
 function buildIncomeMap() {
-  hideInfoCSP();
   const map = createOpenStreetMapLayer('mapJob');
   let jobLayer = L.layerGroup();
   jobLayer.addTo(map);
@@ -93,23 +91,22 @@ function buildTransportationMeanMap() {
   let lineArcs = L.layerGroup();
   let markerLayer = L.layerGroup();
   markerLayer.addTo(map);
-  // map.on('click', layerOnClick);
-
-  // function layerOnClick(_event: Event) {
-  //   debugger;
-  //   if (lineOutlines) {
-  //     map.removeLayer(lineOutlines);
-  //     map.removeLayer(lineInlines);
-  //     map.removeLayer(lineArcs);
-  //   }
-  // }
-  const infoDomElement = document.getElementById('infoMean');
+  map.on('click', layerOnClick);
+  document.getElementById('hideArcs').addEventListener('click', layerOnClick);
+  function layerOnClick(_event: Event) {
+    if (lineOutlines) {
+      map.removeLayer(lineOutlines);
+      map.removeLayer(lineInlines);
+      map.removeLayer(lineArcs);
+    }
+  }
+  // const infoDomElement = document.getElementById('infoMean');
 
   function markerMeanOnClick(event: Event) {
-    var props = event.target['properties'];
-    if (infoDomElement) {
-      infoDomElement.innerHTML = props.join('<br>');
-    }
+    // var props = event.target['properties'];
+    // if (infoDomElement) {
+    //   infoDomElement.innerHTML = props.join('<br>');
+    // }
 
     if (lineOutlines) {
       map.removeLayer(lineOutlines);
@@ -184,13 +181,13 @@ function buildCarTrafficMap() {
       map.removeLayer(lineArcs);
     }
   }
-  const infoDomElement = document.getElementById('infoTraffic');
+  // const infoDomElement = document.getElementById('infoTraffic');
 
   function markerTrafficOnClick(event: Event) {
-    var props = event.target['properties'];
-    if (infoDomElement) {
-      infoDomElement.innerHTML = props.join('<br>');
-    }
+    // var props = event.target['properties'];
+    // if (infoDomElement) {
+    //   infoDomElement.innerHTML = props.join('<br>');
+    // }
 
     if (lineOutlines) {
       map.removeLayer(lineOutlines);

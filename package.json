@@ -1,9 +1,9 @@
 {
   "name": "hackaviz2019",
   "version": "0.0.1",
-  "description": "some prototype for Hackaviz 2019",
+  "description": "Some prototype for Hackaviz 2019",
   "main": "leaf-demo.js",
-  "repository": "https://github.com/asmaloney/Leaflet_Example.git",
+  "repository": "https://github.com/vvivanloc/hackaviz2019",
   "author": "n0p@laposte.net",
   "license": "MIT",
   "dependencies": {
