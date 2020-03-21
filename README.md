@@ -1,21 +1,23 @@
-**Hackviz 2009**
+**Hackviz 2020**
 --
 
-
 Data source 
-- Hackaviz 2019 team
+- Hackaviz team
+https://github.com/ToulouseDataViz/Hackaviz2020/blob/master/README.md
 
 Data analysis
-- LibreOffice calc
-- Prototype written in Typescript with Leaflet + OpenStreetMap based on [Andy Moloney](http://asmaloney.com/2014/01/code/creating-an-interactive-map-with-leaflet-and-openstreetmap/)
+
+- LibreOffice, PowerBI, Tableau 
+
+Data processing
+- Python
 
 Data vizualisation
+- LibreOffice, PowerBI, Tableau 
+- VSCode
+- dygraph
+- js-year-calendar
 
-- Typescript Leaflet Template [Ardian Shala](https://github.com/oardi/leaflet-typescript-template)
-- Leaflet plugins (GeometryUtil, SemiCircle & PolylineOffset)
-- Pure CSS tooltip
-- VSCode, Gimp, Inkscape
-
-The demo is available [here](https://vvivanloc.github.io/hackaviz2019/).
+The demo is available [here](https://vvivanloc.github.io/hackaviz2020/).
 
 *Vincent*

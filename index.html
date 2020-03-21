@@ -1,303 +1,375 @@
-<!DOCTYPE html>
-<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
-  <head profile="http://gmpg.org/xfn/11">
-    <title>Jobastre - Hackaviz 2019</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="leaflet/leaflet.css" />
-    <link rel="stylesheet" type="text/css" href="main.css" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  </head>
-
-  <body>
-    <h1>Jobastre</h1>
-    La dataviz pour la France qui se lève pas forcément très tôt pour aller chercher un travail en traversant la rue.
-    <h2>Où ça ?</h2>
-    Combien de rues je vais devoir traverser pour trouver mon prochain boulot ?
-    <div class="column">
-      <div class="map" id="mapJob"></div>
-      <div class="info" id="infoCSP"></div>
-    </div>
-    <div>
-     
-    </div>
-    <div>
-      Répartition des 
-      <span
-        class="tooltip"
-        tooltip="Résidents qui travaillent dans la commune (inter) et qui se déplacent dans
-        une autre commune (extra)"
-        tooltip-position="bottom"
-        >actifs </span
-        
-      >
-      en 2015 par catégorie socioprofessionnelle en nombre de personnes
-
-      <ul>
-        <li>
-          <div
-            class="rectangle alpha"
-            style="background-color:hsl(236, 86%, 71%)"
-          ></div>
-          <span
-            class="tooltip"
-            tooltip=" 
-          Commerçants et assimilés
-          ,Chefs d'entreprise de 10 salariés ou plus
-          ,Professions libérales et assimilés
-          ,Cadres de la fonction publique, professions intellectuelles et
-          # artistiques
-          ,Cadres d'entreprise"
-            tooltip-position="bottom"
-            >CSP 1 (cadres)</span
-          >,
-        </li>
-
-        <li>
-          <div
-            class="rectangle"
-            alpha
-            style="background-color:hsl(86, 100%, 40%)"
-          ></div>
-          <span
-            class="tooltip"
-            tooltip-position="bottom"
-            tooltip="
-          Professions intermédiaires de l'enseignement, de la santé, de
-          la fonction publique et assimilés
-          ,Professions intermédiaires administratives et commerciales des
-          entreprises
-          ,Techniciens
-          ,Contremaîtres, agents de maîtrise
-          ,Artisans
-          ,Agriculteurs exploitants"
-            >CSP 2 (professions intermédiaires)</span
-          >
-        </li>
-        <div
-          class="rectangle"
-          alpha
-          style="background-color:hsl(26, 100%, 40%)"
-        ></div>
-        <span
-          class="tooltip"
-          tooltip-position="bottom"
-          tooltip="
-        Personnels des services directs particuliers
-        ,Employés de commerce
-        ,Employés administratifs d'entreprise
-        ,Employés de la fonction publique
-        ,Ouvriers qualifiés
-        ,Ouvriers non qualifiés
-        ,Ouvriers agricoles"
-          >CSP 3 (employés, ouvriers)</span
-        >
-      </ul>
-    </div>
-    <div>
-      <span
-        class="tooltip"
-        tooltip="Le revenu disponible d'un ménage comprend les revenus d'activité (nets des cotisations sociales), les revenus du patrimoine, les transferts en provenance d'autres ménages et les prestations sociales (y compris les pensions de retraite et les indemnités de chômage), nets des impôts directs."
-        tooltip-position="bottom"
-      >
-        Revenu médian par unité de consommation</span
-      >
-      en euros
-      <a
-        href="http://www.observatoire-des-territoires.gouv.fr/observatoire-des-territoires/fr/itdd-revenu-disponible-m-dian-par-unit-de-consommation"
-      >
-        (Observatoire des territoires)</a
-      >
-      <div class="col-2">
-        <ul>
-          <li>
-            <span
-              class="rectangle big"
-              style="background-image: url('maps/images/building_0.png')"
-            ></span>
-             [0-1300]
-          </li>
-          <li>
-            <span
-              class="rectangle big"
-              style="background-image: url('maps/images/building_1.png')"
-            ></span
-            > ]1300-1400]
-          </li>
-          <li>
-            <span
-              class="rectangle big"
-              style="background-image: url('maps/images/building_2.png')"
-            ></span
-            > ]1400-1600]
-          </li>
-        </ul>
-        <ul>
-          <li>
-            <span
-              class="rectangle big"
-              style="background-image: url('maps/images/building_3.png')"
-            ></span
-            > ]1600-1800]
-          </li>
-          <li>
-            <span
-              class="rectangle big"
-              style="background-image: url('maps/images/building_4.png')"
-            ></span
-            > ]1800-2000]
-          </li>
-          <li>
-            <span
-              class="rectangle big"
-              style="background-image: url('maps/images/building_5.png')"
-            ></span
-            >2000 et plus
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <h2>A pied, en vélo, en métro, en bus ou en auto ?</h2>
-    Ca y'est j'ai trouvé l'endroit idéal ! J'achète une nouvelle paire de chaussures, je répare mon vélo ou je fais passer le contrôle technique à ma veille voiture ?
-    <div class="column">
-      <div id="mapTransportationMean" class="map"></div>
-      <div class="info" id="infoMean"></div>
-    </div>
-    <div>
-      Répartition par moyen de transport en nombre de personnes dans la commune de résidence en 2015
-      <ul>
-        <li>
-          <div
-            class="rectangle alpha"
-            style="background-color:hsl(120, 100%, 40%)"
-          ></div>
-          <span>résidents sans voiture</span>
-        </li>
-        <li>
-          <div
-            class="rectangle alpha"
-            style="background-color:hsl(60, 100%, 40%)"
-          ></div>
-          <span>en voiture et résidents</span>
-        </li>
-        <li>
-          <div
-            class="rectangle alpha"
-            style="background-color:hsl(30, 100%, 40%)"
-          ></div>
-          <span>en voiture à l'extérieur </span>
-        </li>
-      </ul>
-    </div>
-    Comparatif vélo/auto 
-    <div><i>Cliquer sur la commune pour l'afficher, cliquer dans la carte pour le
-    <span id="hideArcs">cacher</span>.</i>
-  </div>
-  <div>
-    Calcul du gain vélo/voiture: 
-    min( temps de parcours en vélo, max ( gain temps vélo/voiture, vitesse de la voiture) )
-  </div>
-  </i>
-    <ul>
-        <li>
-          <span
-            class="rectangle big"
-            style="background-image: url('maps/images/road_0.png')"
-          ></span>
-          Prends ton vélo: moins de 40 minutes et c'est aussi rapide que la voiture.
-        </li>
-        <li>
-          <span
-            class="rectangle big"
-            style="background-image: url('maps/images/road_1.png')"
-          ></span
-          > Pour sportif uniquement: une heure de vélo ou c'est plus rapide en voiture.
-        </li>
-        <li>
-          <span
-            class="rectangle big"
-            style="background-image: url('maps/images/road_2.png')"
-          ></span
-          > C'est trop loin en vélo. 
-        </li>
-      </ul>
-
-    <div id="infoMean"></div>
-    <h2>Combien de temps ?</h2>
-    Pas de chance, je dois prendre mon auto. Est-ce que je vais devoir arrêter de développer le hackaviz 2019 toute la nuit ou je dois me coucher tôt. Est-ce que je vais péter une durite bloqué dans les bouchons ?
-    <div class="column">
-      <div id="mapCarTraffic" class="map"></div>
-      <div class="info" id="infoTraffic"></div>
-    </div>
-    <div>Temps cumulé A/R par commune en minute</div>
-    <div class='col-2'>
-    <div style="width: 400px;
-    height: 200px;
-    background-size: cover;
-    background-image: url('maps/images/trafficTown.gif')"></div>
-     <ul>
-      <li>
-        <div
-          class="rectangle alpha"
-          style="background-color:hsl(200, 100%, 40%)"
-        ></div>
-        <span> moins de 1/4 d'heure: roooh, trop rapide, je pourrais reprendre mon vélo.</span>
-      </li>
-      <li>
-        <div
-          class="rectangle alpha"
-          style="background-color:hsl(120, 100%, 40%)"
-        ></div>
-        <span> entre 15 et 30 minutes: hum, faudrait que j'essaie en vélo.</span>
-      </li>
-      <li>
-        <div
-          class="rectangle alpha"
-          style="background-color:hsl(50, 100%, 40%)"
-        ></div>
-        <span> entre 30 et 45 minutes: je prends mon mal en patience </span>
-      </li>
-      <li>
-        <div
-          class="rectangle alpha"
-          style="background-color:hsl(40, 100%, 40%)"
-        ></div>
-        <span> entre 45 minutes et 1 heure: pourquoi je me suis levé ce matin ?</span>
-      </li>
-      <li>
-        <div
-          class="rectangle alpha"
-          style="background-color:hsl(20, 100%, 40%)"
-        ></div>
-        <span> entre 1 heure et 2 heures: hum, ça commence à bien faire </span>
-      </li>
-      <li>
-        <div
-          class="rectangle alpha"
-          style="background-color:hsl(0, 100%, 40%)"
-        ></div>
-        <span> plus de 2 heures: va falloir songer à déménager ou à démissionner</span>
-      </li>
-    </ul>
-  </div>
-    <div>Trafic A/R entre communes</div>
-    <div><i>Cliquer sur la commune pour afficher le trafic, cliquer dans la carte pour le
-      cacher.</i>
-  <div style="width: 750px;
-  height: 150px;
-  background-size: cover;
-  background-image: url('maps/images/trafficArc.gif')"></div>
-    <script type="text/javascript" src="maps/par_commune.js"></script>
-    <script type="text/javascript" src="maps/par_trajet.js"></script>
-    <!-- <script type="text/javascript" src="leaflet/leaflet.js"></script> -->
-
-    <script type="text/javascript" src="bundle.js"></script>
-    <!-- leaflet plugins -->
+<html>
+  <head>
+    <link rel="stylesheet" href="thirdparty/bootstrap.min.css" />
+    <script src="thirdparty/jquery.min.js"></script>
+    <script src="thirdparty/popper.min.js"></script>
+    <script src="thirdparty/bootstrap.min.js"></script>
+    <script type="text/javascript" src="thirdparty/dygraph.min.js"></script>
     <script
       type="text/javascript"
-      src="leaflet/leaflet.polylineoffset.js"
+      src="thirdparty/js-year-calendar.min.js"
     ></script>
-    <!-- <script type="text/javascript" src="leaflet/leaflet-ant-path.js"></script> -->
+    <script src="thirdparty/locales/js-year-calendar.fr.js"></script>
+    <link rel="stylesheet" href="thirdparty/dygraph.css" />
+    <link rel="stylesheet" href="assets/styles/main.css" />
+  </head>
+  <body>
+    <div class="form">
+      <label for="depSelector">Département</label>
+
+      <select id="depSelector">
+        <option value="09">09</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="30">30</option>
+        <option value="31">31</option>
+        <option value="32">32</option>
+        <option value="34">34</option>
+        <option value="46">46</option>
+        <option value="48">48</option>
+        <option value="65">65</option>
+        <option value="66">66</option>
+        <option value="81">81</option>
+        <option value="82">82</option>
+      </select>
+
+      <button
+        id="val"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Affiche les nuitées de l'année"
+      >
+        Nuitées
+      </button>
+      <button
+        id="var"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        title="Affiche la variation de nuitées avec le jour précédent"
+      >
+        Variations
+      </button>
+    </div>
+    <div id="graphdiv"></div>
+    <div id="calendar" class="calendar"></div>
+    <script type="text/javascript">
+      let currentDep = '09';
+      const defaultValueType = 'val';
+      const maxVar1000Nuitées = {
+        '09': 5,
+        '11': 15,
+        '12': 7,
+        '30': 20,
+        '31': 30,
+        '32': 5,
+        '34': 40,
+        '46': 7,
+        '48': 4,
+        '65': 8,
+        '66': 20,
+        '81': 7,
+        '82': 7
+      };
+
+      function renderGraph(depNumber) {
+        const graph = new Dygraph(
+          // containing div
+          document.getElementById('graphdiv'),
+
+          // 'assets/datasources/par_origin_test.csv'
+          `assets/datasources/par_origin_agg_${depNumber}.csv`,
+          // // CSV or path to a CSV file.
+          // "Date,Temperature\n" +
+          // "2008-05-07,75\n" +
+          // "2008-05-08,70\n" +
+          // "2008-05-09,80\n",
+          {
+            legend: 'always',
+            logscale: false,
+            title: 'Nuitées',
+            underlayCallback: function(canvas, area, g) {
+              canvas.fillStyle = 'peachpuff';
+
+              function highlight_period(x_start, x_end) {
+                // shift back due to TZ
+                x_start += new Date(x_start).getTimezoneOffset();
+                x_end += new Date(x_end).getTimezoneOffset();
+
+                const dateStart = new Date(x_start);
+                x_start = new Date(
+                  dateStart.getFullYear(),
+                  dateStart.getMonth(),
+                  dateStart.getDate()
+                );
+                const dateEnd = new Date(x_end);
+                x_end = new Date(
+                  dateEnd.getFullYear(),
+                  dateEnd.getMonth(),
+                  dateEnd.getDate()
+                );
+                var canvas_left_x = g.toDomXCoord(x_start);
+                var canvas_right_x = g.toDomXCoord(x_end);
+                var canvas_width = canvas_right_x - canvas_left_x;
+                canvas.fillRect(canvas_left_x, area.y, canvas_width, area.h);
+              }
+
+              var min_data_x = g.getValue(0, 0);
+              var max_data_x = g.getValue(g.numRows() - 1, 0);
+
+              // get day of week
+              var d = new Date(min_data_x);
+              var dow = d.getUTCDay();
+
+              var w = min_data_x;
+              // starting on Sunday is a special case
+              if (dow === 0) {
+                highlight_period(w, w + 12 * 3600 * 1000);
+              }
+              // find first saturday
+              while (dow != 6) {
+                w += 24 * 3600 * 1000;
+                d = new Date(w);
+                dow = d.getUTCDay();
+              }
+
+              while (w < max_data_x) {
+                var start_x_highlight = w;
+                var end_x_highlight = w + 2 * 24 * 3600 * 1000;
+                // make sure we don't try to plot outside the graph
+                if (start_x_highlight < min_data_x) {
+                  start_x_highlight = min_data_x;
+                }
+                if (end_x_highlight > max_data_x) {
+                  end_x_highlight = max_data_x;
+                }
+                highlight_period(start_x_highlight, end_x_highlight);
+                // calculate start of highlight for next Saturday
+                w += 7 * 24 * 3600 * 1000;
+              }
+            }
+          }
+        );
+      }
+
+      function renderCalendar(depNumber, valueType) {
+        const renderVariations = valueType === 'var';
+
+        const calendar = new Calendar(document.getElementById('calendar'), {
+          minDate: new Date(2018, 0, 1),
+          maxDate: new Date(new Date(2019, 0, 1).getTime() - 1),
+          startYear: 2018,
+          language: 'fr',
+          style: 'background',
+          displayHeader: false,
+          renderEnd: e => {
+            // force flex
+            const calendarInner = document.querySelector('.months-container');
+            calendarInner.style.display = 'flex';
+            calendarInner.style.flexWrap = 'wrap';
+            calendarInner.style.justifyContent = 'space-around';
+            calendarInner.style.alignContent = 'space-around';
+          },
+          customDayRenderer: (cellContent, currentDate) => {
+            const filteredFiestas = fiestas.filter(
+              fiesta => fiesta.dep === currentDep
+            );
+            filteredFiestas.forEach(fiesta => {
+              if (
+                fiesta.startDate.getTime() <= currentDate &&
+                currentDate <= fiesta.endDate.getTime()
+              ) {
+                cellContent.style.fontWeight = 'bolder';
+              }
+            });
+          },
+          mouseOnDay: e => {
+            if (e.events.length > 0) {
+              var content = '';
+
+              let fiestaStr = '';
+
+              const currentDate = new Date(e.date).getTime();
+
+              fiestaStr += '';
+              const filteredFiestas = fiestas.filter(
+                fiesta => fiesta.dep === currentDep
+              );
+
+              filteredFiestas.forEach(fiesta => {
+                if (
+                  fiesta.startDate.getTime() <= currentDate &&
+                  currentDate <= fiesta.endDate.getTime()
+                ) {
+                  fiestaStr +=
+                    '<div class="event-name"> ⚬&nbsp;&nbsp;' +
+                    fiesta.event +
+                    '</div>';
+                }
+              });
+
+              for (var i in e.events) {
+                content +=
+                  '<div class="event-tooltip-content">' +
+                  fiestaStr +
+                  '<div class="event-value">' +
+                  e.events[i].value +
+                  ' nuitées</div>';
+              }
+              $(e.element).popover({
+                placement: 'top',
+                trigger: 'manual',
+                container: 'body',
+                html: true,
+                content: content
+              });
+
+              $(e.element).popover('show');
+            }
+          },
+          mouseOutDay: e => {
+            if (e.events.length > 0) {
+              $(e.element).popover('hide');
+            }
+          }
+        });
+
+        const varNuitées = [];
+
+        const dateISOToDate = dateStr => {
+          const dateArr = dateStr.split('-');
+          return new Date(
+            Number(dateArr[0]),
+            Number(dateArr[1] - 1),
+            Number(dateArr[2])
+          );
+        };
+
+        function varNuitéesToLuminanceHue(nbVar, maxVar) {
+          const frac = Math.min(1, Math.abs(nbVar) / maxVar);
+          return 100 - Math.floor(frac * 50) + '%';
+        }
+
+        function varNuitéesToColor(varNuitée) {
+          return `hsl(${
+            varNuitée.value < 0 ? 0 : 124
+          },100%,${varNuitéesToLuminanceHue(
+            varNuitée.value,
+            maxVar1000Nuitées[depNumber] * 1000
+          )})`;
+        }
+
+        function valAbsNuitéesToColor(varNuitée, maxVar) {
+          const frac =
+            Math.min(1, (Math.abs(varNuitée.value) / maxVar) * 0.75) * 100;
+          if (frac < 20) return '#ffffb2';
+          if (frac < 40) return '#fecc5c';
+          if (frac < 60) return '#fd8d3c';
+          if (frac < 80) return '#f03b20';
+          if (frac < 100) return '#bd0026';
+        }
+
+        function onLoadOrigins() {
+          const csvFile = this.responseText.split('\n');
+
+          for (let i = 1; i < csvFile.length; i++) {
+            if (csvFile[i].length > 0) {
+              const values = csvFile[i].split(',');
+              varNuitées.push({
+                id: i,
+                startDate: dateISOToDate(values[0]),
+                endDate: dateISOToDate(values[0]),
+                value: Number(values[renderVariations ? 1 : 2])
+              });
+            }
+          }
+
+          let maxVal = 0;
+          varNuitées.forEach(
+            varNuitée => (maxVal = Math.max(maxVal, varNuitée.value))
+          );
+
+          varNuitées.forEach(
+            varNuitée =>
+              (varNuitée.color = renderVariations
+                ? varNuitéesToColor(varNuitée)
+                : valAbsNuitéesToColor(varNuitée, maxVal))
+          );
+
+          calendar.setDataSource(varNuitées);
+        }
+
+        var oReqOrigin = new XMLHttpRequest();
+        oReqOrigin.onload = onLoadOrigins;
+        oReqOrigin.onerror = reqError;
+        oReqOrigin.open(
+          'get',
+          `assets/datasources/par_origin_agg_${depNumber}.csv`,
+          true
+        );
+        oReqOrigin.send();
+      }
+
+      function reqError(err) {
+        console.log('Fetch Error :-S', err);
+      }
+      function renderGraphAndCalendar(depNumber, valueType) {
+        // renderGraph(depNumber);
+        //'var'
+        currentDep = depNumber;
+        renderCalendar(depNumber, valueType);
+      }
+
+      // add fiestas
+      const fiestas = [];
+      var oReqFiestas = new XMLHttpRequest();
+      oReqFiestas.onload = onLoadFiestas;
+      oReqFiestas.onerror = reqError;
+      oReqFiestas.open('get', `assets/datasources/complements.csv`, true);
+      oReqFiestas.send();
+
+      function onLoadFiestas() {
+        const dateFrToDate = dateStr => {
+          const dateArr = dateStr.split('/');
+          return new Date(
+            Number(dateArr[2]),
+            Number(dateArr[1] - 1),
+            Number(dateArr[0])
+          );
+        };
+
+        const csvFile = this.responseText.split('\n');
+
+        for (let i = 1; i < csvFile.length; i++) {
+          if (csvFile[i].length > 0) {
+            const values = csvFile[i].split(',');
+            if (values) {
+              fiestas.push({
+                dep: values[0],
+                startDate: dateFrToDate(values[2]),
+                endDate: dateFrToDate(values[3]),
+                event: values[1]
+              });
+            }
+          }
+        }
+        renderGraphAndCalendar(currentDep, defaultValueType);
+      }
+
+      const selectElement = document.querySelector('#depSelector');
+      selectElement.addEventListener('change', event => {
+        const selectedDep = event.target.value;
+        renderGraphAndCalendar(selectedDep);
+      });
+
+      const valButtonElement = document.querySelector('#val');
+      valButtonElement.addEventListener('click', event => {
+        renderGraphAndCalendar(selectElement.value, 'val');
+      });
+
+      const varButtonElement = document.querySelector('#var');
+      varButtonElement.addEventListener('click', event => {
+        renderGraphAndCalendar(selectElement.value, 'var');
+      });
+    </script>
   </body>
 </html>

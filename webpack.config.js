@@ -25,11 +25,6 @@ module.exports = (env, argv) => {
         {
           test: /\.tsx?$/,
           loader: 'ts-loader'
-        },
-        {
-          // FIXME
-          test: /\.less$/,
-          loader: 'less-loader'
         }
       ]
     },
