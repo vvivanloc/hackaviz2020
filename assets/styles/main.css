@@ -1,5 +1,5 @@
 .form {
-  margin: 10px 20px;
+  margin: 20px;
   display: flex;
   height: 25px;
   align-items: center;
@@ -21,14 +21,19 @@ select {
   top: 40px;
   bottom: 50%;
 }
-#calendar {
-  position: absolute;
+.calendar-container {
+  display: flex;
+  justify-content: center;
+}
+.calendar-container #calendar {
+  flex: 1;
+  max-width: 1335px;
   left: 10px;
   right: 10px;
   top: 70px;
   bottom: 100%;
 }
-#calendar .flex-calendar {
+.calendar-container #calendar .flex-calendar {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;

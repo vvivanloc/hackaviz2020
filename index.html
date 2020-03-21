@@ -50,8 +50,10 @@
         Variations
       </button>
     </div>
-    <div id="graphdiv"></div>
-    <div id="calendar" class="calendar"></div>
+    <!-- <div id="graphdiv"></div> -->
+    <div class="calendar-container">
+      <div id="calendar" class="calendar"></div>
+    </div>
     <script type="text/javascript">
       let currentDep = '09';
       const defaultValueType = 'val';
@@ -218,7 +220,7 @@
               $(e.element).popover({
                 placement: 'top',
                 trigger: 'manual',
-                container: 'body',
+                container: '.calendar',
                 html: true,
                 content: content
               });

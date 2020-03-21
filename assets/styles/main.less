@@ -1,6 +1,6 @@
 
 .form {
-    margin: 10px 20px;
+    margin: 20px;
     display: flex;
     height: 25px;
     align-items: center;
@@ -24,8 +24,12 @@ select {
     bottom: 50%;
 }
 
+.calendar-container {
+    display: flex;
+    justify-content: center;
 #calendar {
-    position: absolute;
+    flex:1;
+    max-width: 1335px;
     left: 10px;
     right: 10px;
     top: 70px;
@@ -36,6 +40,7 @@ select {
         flex-wrap: wrap;
         justify-content: space-around;
     }
+}
 }
 
 @import "./calendar.less";
