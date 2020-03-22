@@ -12,10 +12,12 @@
   "devDependencies": {
     "copy-webpack-plugin": "5.1.1",    
     "file-loader": "6.0.0",
+    "dygraphs":"2.1.0",
     "html-webpack-plugin": "3.2.0",
     "less":"3.11.1",    
     "style-loader": "1.1.3",
     "ts-loader": "6.2.1",
+    "js-year-calendar":"1.0.0-alpha.7",
     "tsc": "1.20150623.0",
     "typescript": "3.8.3",
     "url-loader": "4.0.0",
@@ -30,6 +32,6 @@
     "build:less": "yarn run lessc assets/styles/main.less assets/styles/main.css",
     "start": "webpack-dev-server --mode development --open",
     "build": "yarn run build:less && webpack --mode production",
-    "_build:watch": "yarn run build --watch"
+    "build:watch": "yarn run build --watch"
   }
 }

@@ -28,7 +28,7 @@ module.exports = (env, argv) => {
         }
       ]
     },
-    plugins: [
+   /* plugins: [
       new CopyPlugin([
         { from: './node_modules/leaflet/dist/leaflet.css', to: 'leaflet' },
         {
@@ -37,6 +37,6 @@ module.exports = (env, argv) => {
           to: 'leaflet'
         }
       ])
-    ]
+    ]*/
   };
 };

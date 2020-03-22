@@ -1,377 +1,59 @@
 <html>
-  <head>
-    <link rel="stylesheet" href="thirdparty/bootstrap.min.css" />
-    <script src="thirdparty/jquery.min.js"></script>
-    <script src="thirdparty/popper.min.js"></script>
-    <script src="thirdparty/bootstrap.min.js"></script>
-    <script type="text/javascript" src="thirdparty/dygraph.min.js"></script>
-    <script
-      type="text/javascript"
-      src="thirdparty/js-year-calendar.min.js"
-    ></script>
-    <script src="thirdparty/locales/js-year-calendar.fr.js"></script>
-    <link rel="stylesheet" href="thirdparty/dygraph.css" />
-    <link rel="stylesheet" href="assets/styles/main.css" />
-  </head>
-  <body>
-    <div class="form">
-      <label for="depSelector">Département</label>
 
-      <select id="depSelector">
-        <option value="09">09</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="30">30</option>
-        <option value="31">31</option>
-        <option value="32">32</option>
-        <option value="34">34</option>
-        <option value="46">46</option>
-        <option value="48">48</option>
-        <option value="65">65</option>
-        <option value="66">66</option>
-        <option value="81">81</option>
-        <option value="82">82</option>
-      </select>
+<head>
+  <link rel="stylesheet" href="thirdparty/bootstrap.min.css" />
+  <script src="thirdparty/jquery.min.js"></script>
+  <script src="thirdparty/popper.min.js"></script>
+  <script src="thirdparty/bootstrap.min.js"></script>
+  <!-- <script type="text/javascript" src="thirdparty/dygraph.min.js"></script> -->
+  <!-- <script type="text/javascript" src="thirdparty/js-year-calendar.min.js"></script>
+  <script src="thirdparty/locales/js-year-calendar.fr.js"></script> -->
+  <!-- <link rel="stylesheet" href="thirdparty/dygraph.css" /> -->
+  <link rel="stylesheet" href="assets/styles/main.css" />
+</head>
 
-      <button
-        id="val"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="Affiche les nuitées de l'année"
-      >
-        Nuitées
-      </button>
-      <button
-        id="var"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="Affiche la variation de nuitées avec le jour précédent"
-      >
-        Variations
-      </button>
-    </div>
-    <!-- <div id="graphdiv"></div> -->
-    <div class="calendar-container">
-      <div id="calendar" class="calendar"></div>
-    </div>
-    <script type="text/javascript">
-      let currentDep = '09';
-      const defaultValueType = 'val';
-      const maxVar1000Nuitées = {
-        '09': 5,
-        '11': 15,
-        '12': 7,
-        '30': 20,
-        '31': 30,
-        '32': 5,
-        '34': 40,
-        '46': 7,
-        '48': 4,
-        '65': 8,
-        '66': 20,
-        '81': 7,
-        '82': 7
-      };
+<body>
+  <div class="form">
+    <label for="depSelector">Département</label>
 
-      function renderGraph(depNumber) {
-        const graph = new Dygraph(
-          // containing div
-          document.getElementById('graphdiv'),
+    <select id="depSelector">
+      <option value="09">Ariège (09)</option>
+      <option value="11">Aude (11)</option>
+      <option value="12">Aveyron (12)</option>
+      <option value="30">Gard (30)</option>
+      <option value="31">Haute-Garonne (31)</option>
+      <option value="32">Gers (32)</option>
+      <option value="34">Hérault (34)</option>
+      <option value="46">Lot (46)</option>
+      <option value="48">Lozère (48)</option>
+      <option value="65">Hautes-Pyrénées (65)</option>
+      <option value="66">Pyrénées-Orientales (66)</option>
+      <option value="81">Tarn (81)</option>
+      <option value="82">Tarn-et-Garonne (82)</option>
+    </select>
 
-          // 'assets/datasources/par_origin_test.csv'
-          `assets/datasources/par_origin_agg_${depNumber}.csv`,
-          // // CSV or path to a CSV file.
-          // "Date,Temperature\n" +
-          // "2008-05-07,75\n" +
-          // "2008-05-08,70\n" +
-          // "2008-05-09,80\n",
-          {
-            legend: 'always',
-            logscale: false,
-            title: 'Nuitées',
-            underlayCallback: function(canvas, area, g) {
-              canvas.fillStyle = 'peachpuff';
+    <button id="val" data-toggle="tooltip" data-placement="bottom" title="Affiche les nuitées de l'année">
+      Nuitées
+    </button>
+    <button id="var" data-toggle="tooltip" data-placement="bottom"
+      title="Affiche la variation de nuitées avec le jour précédent">
+      Variations
+    </button>
+    <div class="spacer"></div>
 
-              function highlight_period(x_start, x_end) {
-                // shift back due to TZ
-                x_start += new Date(x_start).getTimezoneOffset();
-                x_end += new Date(x_end).getTimezoneOffset();
+    <a href="https://github.com/ToulouseDataViz/Hackaviz2020"><img title="ToulouseDataViz" src="./assets/images/tdv.png"
+        alt="ToulouseDataViz" width="32" height="32"></a>
+    <a href="https://github.com/vvivanloc/hackaviz2020"><img title="GitHub" src="./assets/images/GitHub-Mark-32px.png"
+        alt="GitHub" width="32" height="32"></a>
 
-                const dateStart = new Date(x_start);
-                x_start = new Date(
-                  dateStart.getFullYear(),
-                  dateStart.getMonth(),
-                  dateStart.getDate()
-                );
-                const dateEnd = new Date(x_end);
-                x_end = new Date(
-                  dateEnd.getFullYear(),
-                  dateEnd.getMonth(),
-                  dateEnd.getDate()
-                );
-                var canvas_left_x = g.toDomXCoord(x_start);
-                var canvas_right_x = g.toDomXCoord(x_end);
-                var canvas_width = canvas_right_x - canvas_left_x;
-                canvas.fillRect(canvas_left_x, area.y, canvas_width, area.h);
-              }
+  </div>
+  <!-- <div id="graphdiv"></div> -->
+  <div class="calendar-container">
+    <div id="calendar" class="calendar"></div>
+  </div>
+  <script type="text/javascript" src="./bundle.js">
 
-              var min_data_x = g.getValue(0, 0);
-              var max_data_x = g.getValue(g.numRows() - 1, 0);
+  </script>
+</body>
 
-              // get day of week
-              var d = new Date(min_data_x);
-              var dow = d.getUTCDay();
-
-              var w = min_data_x;
-              // starting on Sunday is a special case
-              if (dow === 0) {
-                highlight_period(w, w + 12 * 3600 * 1000);
-              }
-              // find first saturday
-              while (dow != 6) {
-                w += 24 * 3600 * 1000;
-                d = new Date(w);
-                dow = d.getUTCDay();
-              }
-
-              while (w < max_data_x) {
-                var start_x_highlight = w;
-                var end_x_highlight = w + 2 * 24 * 3600 * 1000;
-                // make sure we don't try to plot outside the graph
-                if (start_x_highlight < min_data_x) {
-                  start_x_highlight = min_data_x;
-                }
-                if (end_x_highlight > max_data_x) {
-                  end_x_highlight = max_data_x;
-                }
-                highlight_period(start_x_highlight, end_x_highlight);
-                // calculate start of highlight for next Saturday
-                w += 7 * 24 * 3600 * 1000;
-              }
-            }
-          }
-        );
-      }
-
-      function renderCalendar(depNumber, valueType) {
-        const renderVariations = valueType === 'var';
-
-        const calendar = new Calendar(document.getElementById('calendar'), {
-          minDate: new Date(2018, 0, 1),
-          maxDate: new Date(new Date(2019, 0, 1).getTime() - 1),
-          startYear: 2018,
-          language: 'fr',
-          style: 'background',
-          displayHeader: false,
-          renderEnd: e => {
-            // force flex
-            const calendarInner = document.querySelector('.months-container');
-            calendarInner.style.display = 'flex';
-            calendarInner.style.flexWrap = 'wrap';
-            calendarInner.style.justifyContent = 'space-around';
-            calendarInner.style.alignContent = 'space-around';
-          },
-          customDayRenderer: (cellContent, currentDate) => {
-            const filteredFiestas = fiestas.filter(
-              fiesta => fiesta.dep === currentDep
-            );
-            filteredFiestas.forEach(fiesta => {
-              if (
-                fiesta.startDate.getTime() <= currentDate &&
-                currentDate <= fiesta.endDate.getTime()
-              ) {
-                cellContent.style.fontWeight = 'bolder';
-              }
-            });
-          },
-          mouseOnDay: e => {
-            if (e.events.length > 0) {
-              var content = '';
-
-              let fiestaStr = '';
-
-              const currentDate = new Date(e.date).getTime();
-
-              fiestaStr += '';
-              const filteredFiestas = fiestas.filter(
-                fiesta => fiesta.dep === currentDep
-              );
-
-              filteredFiestas.forEach(fiesta => {
-                if (
-                  fiesta.startDate.getTime() <= currentDate &&
-                  currentDate <= fiesta.endDate.getTime()
-                ) {
-                  fiestaStr +=
-                    '<div class="event-name"> ⚬&nbsp;&nbsp;' +
-                    fiesta.event +
-                    '</div>';
-                }
-              });
-
-              for (var i in e.events) {
-                content +=
-                  '<div class="event-tooltip-content">' +
-                  fiestaStr +
-                  '<div class="event-value">' +
-                  e.events[i].value +
-                  ' nuitées</div>';
-              }
-              $(e.element).popover({
-                placement: 'top',
-                trigger: 'manual',
-                container: '.calendar',
-                html: true,
-                content: content
-              });
-
-              $(e.element).popover('show');
-            }
-          },
-          mouseOutDay: e => {
-            if (e.events.length > 0) {
-              $(e.element).popover('hide');
-            }
-          }
-        });
-
-        const varNuitées = [];
-
-        const dateISOToDate = dateStr => {
-          const dateArr = dateStr.split('-');
-          return new Date(
-            Number(dateArr[0]),
-            Number(dateArr[1] - 1),
-            Number(dateArr[2])
-          );
-        };
-
-        function varNuitéesToLuminanceHue(nbVar, maxVar) {
-          const frac = Math.min(1, Math.abs(nbVar) / maxVar);
-          return 100 - Math.floor(frac * 50) + '%';
-        }
-
-        function varNuitéesToColor(varNuitée) {
-          return `hsl(${
-            varNuitée.value < 0 ? 0 : 124
-          },100%,${varNuitéesToLuminanceHue(
-            varNuitée.value,
-            maxVar1000Nuitées[depNumber] * 1000
-          )})`;
-        }
-
-        function valAbsNuitéesToColor(varNuitée, maxVar) {
-          const frac =
-            Math.min(1, (Math.abs(varNuitée.value) / maxVar) * 0.75) * 100;
-          if (frac < 20) return '#ffffb2';
-          if (frac < 40) return '#fecc5c';
-          if (frac < 60) return '#fd8d3c';
-          if (frac < 80) return '#f03b20';
-          if (frac < 100) return '#bd0026';
-        }
-
-        function onLoadOrigins() {
-          const csvFile = this.responseText.split('\n');
-
-          for (let i = 1; i < csvFile.length; i++) {
-            if (csvFile[i].length > 0) {
-              const values = csvFile[i].split(',');
-              varNuitées.push({
-                id: i,
-                startDate: dateISOToDate(values[0]),
-                endDate: dateISOToDate(values[0]),
-                value: Number(values[renderVariations ? 1 : 2])
-              });
-            }
-          }
-
-          let maxVal = 0;
-          varNuitées.forEach(
-            varNuitée => (maxVal = Math.max(maxVal, varNuitée.value))
-          );
-
-          varNuitées.forEach(
-            varNuitée =>
-              (varNuitée.color = renderVariations
-                ? varNuitéesToColor(varNuitée)
-                : valAbsNuitéesToColor(varNuitée, maxVal))
-          );
-
-          calendar.setDataSource(varNuitées);
-        }
-
-        var oReqOrigin = new XMLHttpRequest();
-        oReqOrigin.onload = onLoadOrigins;
-        oReqOrigin.onerror = reqError;
-        oReqOrigin.open(
-          'get',
-          `assets/datasources/par_origin_agg_${depNumber}.csv`,
-          true
-        );
-        oReqOrigin.send();
-      }
-
-      function reqError(err) {
-        console.log('Fetch Error :-S', err);
-      }
-      function renderGraphAndCalendar(depNumber, valueType) {
-        // renderGraph(depNumber);
-        //'var'
-        currentDep = depNumber;
-        renderCalendar(depNumber, valueType);
-      }
-
-      // add fiestas
-      const fiestas = [];
-      var oReqFiestas = new XMLHttpRequest();
-      oReqFiestas.onload = onLoadFiestas;
-      oReqFiestas.onerror = reqError;
-      oReqFiestas.open('get', `assets/datasources/complements.csv`, true);
-      oReqFiestas.send();
-
-      function onLoadFiestas() {
-        const dateFrToDate = dateStr => {
-          const dateArr = dateStr.split('/');
-          return new Date(
-            Number(dateArr[2]),
-            Number(dateArr[1] - 1),
-            Number(dateArr[0])
-          );
-        };
-
-        const csvFile = this.responseText.split('\n');
-
-        for (let i = 1; i < csvFile.length; i++) {
-          if (csvFile[i].length > 0) {
-            const values = csvFile[i].split(',');
-            if (values) {
-              fiestas.push({
-                dep: values[0],
-                startDate: dateFrToDate(values[2]),
-                endDate: dateFrToDate(values[3]),
-                event: values[1]
-              });
-            }
-          }
-        }
-        renderGraphAndCalendar(currentDep, defaultValueType);
-      }
-
-      const selectElement = document.querySelector('#depSelector');
-      selectElement.addEventListener('change', event => {
-        const selectedDep = event.target.value;
-        renderGraphAndCalendar(selectedDep);
-      });
-
-      const valButtonElement = document.querySelector('#val');
-      valButtonElement.addEventListener('click', event => {
-        renderGraphAndCalendar(selectElement.value, 'val');
-      });
-
-      const varButtonElement = document.querySelector('#var');
-      varButtonElement.addEventListener('click', event => {
-        renderGraphAndCalendar(selectElement.value, 'var');
-      });
-    </script>
-  </body>
 </html>

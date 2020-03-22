@@ -7,6 +7,12 @@
 .form label {
   margin: 0 10px;
 }
+.form .spacer {
+  flex: 1;
+}
+.form img {
+  margin: 0px 10px;
+}
 button:first-of-type {
   margin-left: 20px;
   margin-right: 5px;
@@ -65,8 +71,8 @@ body {
 }
 .calendar .months-container .month-container {
   height: 235px;
-  margin-bottom: 64px;
-  padding-bottom: 64px;
+  margin-bottom: 36px;
+  padding-bottom: 36px;
 }
 .calendar table.month {
   background-color: white;
@@ -94,6 +100,7 @@ body {
   padding: 9px 7px;
   border-radius: 2px;
   font-size: 12px;
+  text-align: right;
 }
 .event-value {
   font-size: 12px;
